@@ -9,7 +9,7 @@ import IP from "../constants/IP";
 import { useEffect, useState } from "react";
 
 
-const HomeScreen=()=>{
+const HomeScreen=(props)=>{
 
     const [isLoading,setLoading]=useState(true);
     const [mealsData,setmealsData]=useState([]);
@@ -25,7 +25,18 @@ const HomeScreen=()=>{
     
       const renderFoodItem=(itemData)=>{
         return(
-           <FoodItem title={itemData.item.dish_name} imageUrl={itemData.item.image} kitchenName={itemData.item.kitchen_name} price={itemData.item.price} onSelect={()=>{}}/>
+           <FoodItem title={itemData.item.dish_name} imageUrl={itemData.item.image} kitchenName={itemData.item.kitchen_name}
+            price={itemData.item.price}
+            onSelect={()=>{
+                
+                props.navigation.navigate({
+                    routeName:'FoodDetail',
+                    params:{
+                        mealId:itemData.item.dish_id
+                    }
+                });
+               }
+            }/>
         )
     }
 

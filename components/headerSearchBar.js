@@ -13,7 +13,9 @@ const SearchBarHeader=props=>{
 
     const renderCatItem=(itemData)=>{
         return(
-            <CategoryTile category={itemData.item} color={Colors.whiteColor} onSelect={()=>{}}/>
+            <CategoryTile category={itemData.item} color={Colors.whiteColor} onSelect={()=>{
+                
+            }}/>
          )
     }
 
