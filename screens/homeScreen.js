@@ -4,21 +4,46 @@ import Colors from '../constants/Colors';;
 import { HeaderButtons,Item } from "react-navigation-header-buttons";
 import CustomHeaderButton from "../components/customHeaderButton";
 import SearchBarHeader from "../components/headerSearchBar";
+import FoodItem from "../components/foodItem";
+import IP from "../constants/IP";
 import { useEffect, useState } from "react";
 
 
 const HomeScreen=()=>{
 
+    const [isLoading,setLoading]=useState(true);
+    const [mealsData,setmealsData]=useState([]);
+
+    useEffect(()=>{
+        fetch(`http://${IP.ip}:3000/dish`)
+        .then((response)=>response.json())
+        .then((response)=>setmealsData(response))
+        .catch((error)=>console.error(error))
+        .finally(()=>setLoading(false));
+      },[]);
+
     
+      const renderFoodItem=(itemData)=>{
         return(
-        <SafeAreaView>
-        <View>
+           <FoodItem title={itemData.item.dish_name} imageUrl={itemData.item.image} kitchenName={itemData.item.kitchen_name} price={itemData.item.price} onSelect={()=>{}}/>
+        )
+    }
+
+
+        return(
+       
+        <View style={styles.container}>
         <View style={styles.header}>
         <SearchBarHeader/>
-        <FlatList/>
+        
+          </View>
+          <View style={styles.mealsContainer}>
+          
+          <FlatList data={mealsData} renderItem={renderFoodItem}/>
+          
           </View>
           </View>
-          </SafeAreaView>
+        
         )
     };
 
@@ -38,7 +63,7 @@ const styles=StyleSheet.create(
         },
         header:{
            
-            height:200,
+            height:125,
             flexDirection:'column'
        
     },
@@ -46,6 +71,14 @@ const styles=StyleSheet.create(
         width:'100%',
         height:200,
         paddingTop:400
+    },
+    container:{
+        flex:1,
+        flexDirection:'column',
+      
+    },
+    mealsContainer:{
+       width:'100%'
     }
 }
 )

@@ -9,10 +9,11 @@ import { color } from "react-native-reanimated";
 
 const SearchBarHeader=props=>{
     const [value,setValue]=useState("");
+    const [catColor,setCatColor]=useState("#fff");
 
     const renderCatItem=(itemData)=>{
         return(
-            <CategoryTile category={itemData.item} color={Colors.accentColor} onSelect={()=>{}}/>
+            <CategoryTile category={itemData.item} color={Colors.whiteColor} onSelect={()=>{}}/>
          )
     }
 
