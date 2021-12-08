@@ -2,10 +2,20 @@ import { HeaderButton } from "react-navigation-header-buttons";
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "../constants/Colors";
 import React,{useState} from "react";
-import { View,StyleSheet,Text,TextInput,Dimensions } from "react-native";
+import { Categories } from "../constants/categories";
+import CategoryTile from "./categoryTile";
+import { View,StyleSheet,Text,TextInput,Dimensions, ScrollView,FlatList } from "react-native";
+import { color } from "react-native-reanimated";
 
 const SearchBarHeader=props=>{
     const [value,setValue]=useState("");
+
+    const renderCatItem=(itemData)=>{
+        return(
+            <CategoryTile category={itemData.item} color={Colors.accentColor} onSelect={()=>{}}/>
+         )
+    }
+
     return(
         <View style={styles.header}>
             <View style={styles.searchContainer}>
@@ -15,6 +25,10 @@ const SearchBarHeader=props=>{
                 <Ionicons name="search" size={24} color="white"/>
                 </View>
                 <Ionicons name="ios-notifications" size={24} color="white"/>
+            </View>
+            <View style={styles.categoriesScroll}>
+               
+                <FlatList horizontal data={Categories} renderItem={renderCatItem} keyExtractor={(item) => item}/>
             </View>
         </View>
     )
@@ -48,6 +62,10 @@ const styles=StyleSheet.create({
         borderRadius:10,
         paddingHorizontal:10,
         
+    },
+    categoriesScroll:{
+        height:50,
+        backgroundColor:Colors.primaryColor
     }
 })
 

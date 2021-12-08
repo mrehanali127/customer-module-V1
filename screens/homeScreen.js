@@ -1,5 +1,5 @@
 import React from "react";
-import { View,Text,StyleSheet, Button, FlatList, Dimensions,TouchableOpacity,SafeAreaView } from "react-native";
+import { View,Text,StyleSheet, Button, FlatList, Dimensions,TouchableOpacity,SafeAreaView, ScrollView} from "react-native";
 import Colors from '../constants/Colors';;
 import { HeaderButtons,Item } from "react-navigation-header-buttons";
 import CustomHeaderButton from "../components/customHeaderButton";
@@ -15,7 +15,7 @@ const HomeScreen=()=>{
         <View>
         <View style={styles.header}>
         <SearchBarHeader/>
-        
+        <FlatList/>
           </View>
           </View>
           </SafeAreaView>
@@ -38,8 +38,14 @@ const styles=StyleSheet.create(
         },
         header:{
            
-            height:200
+            height:200,
+            flexDirection:'column'
        
+    },
+    categoriesScrollView:{
+        width:'100%',
+        height:200,
+        paddingTop:400
     }
 }
 )
