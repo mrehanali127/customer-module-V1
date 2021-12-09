@@ -32,7 +32,10 @@ const HomeScreen=(props)=>{
                 props.navigation.navigate({
                     routeName:'FoodDetail',
                     params:{
-                        mealId:itemData.item.dish_id
+                        mealId:itemData.item.dish_id,
+                        mealData:mealsData
+
+
                     }
                 });
                }
@@ -89,7 +92,8 @@ const styles=StyleSheet.create(
       
     },
     mealsContainer:{
-       width:'100%'
+       width:'100%',
+       paddingBottom:100,
     }
 }
 )
