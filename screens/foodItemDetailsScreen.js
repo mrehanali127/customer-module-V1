@@ -1,6 +1,7 @@
 import React,{useEffect,useState,useCallback} from "react";
 import { ScrollView, View,Text,StyleSheet, Button,Image,ImageBackground,Dimensions} from "react-native";
 import Colors from "../constants/Colors";
+import { MaterialIcons } from '@expo/vector-icons';
 import { HeaderButtons,Item } from "react-navigation-header-buttons";
 import CustomHeaderButton from '../components/customHeaderButton';
 import IP from "../constants/IP";
@@ -26,7 +27,10 @@ const FoodItemDetailsScreen=(props)=>{
             </ImageBackground>
         </View>
         <View style={styles.details}>
+            <View style={styles.kitchenNameHeader}>
             <Text style={styles.kitchenName}>{selectedMeal[0].kitchen_name}</Text>
+            <MaterialIcons name="favorite-outline" size={28} color={Colors.primaryColor} />
+            </View>
             <Text style={styles.price}>Rs.{selectedMeal[0].price}</Text>
             <Text style={styles.category}>Category: {selectedMeal[0].cat_name}</Text>
         </View>
@@ -67,6 +71,11 @@ const styles=StyleSheet.create(
         borderWidth:1,
         padding:10
     },
+    kitchenNameHeader:{
+        width:'100%',
+        flexDirection:'row',
+        justifyContent:'space-between'
+    },
     description:{
         width:'80%',
         marginHorizontal:20,
@@ -81,7 +90,7 @@ const styles=StyleSheet.create(
 
     },
     foodItem:{
-         height:Dimensions.get('window').height*0.7,
+         height:Dimensions.get('window').height*0.6,
          width:'100%',
          backgroundColor:'#f5f5f5',
          overflow:'hidden',
