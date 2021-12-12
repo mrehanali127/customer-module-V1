@@ -14,6 +14,7 @@ import FavoritesScreen from '../screens/favoritesScreen';
 import CartScreen from '../screens/cartScreen';
 import ProfileScreen from '../screens/profileScreen';
 import RestaurantsScreen from '../screens/restaurantsScreen';
+import RestaurantDetailScreen from '../screens/restaurantDetailScreen';
 import FoodItemDetailsScreen from '../screens/foodItemDetailsScreen';
 
 
@@ -31,7 +32,8 @@ const defaultNavConfiguration= {
 const HomeNavigator=createStackNavigator(
     {
         Home: HomeScreen,
-        FoodDetail:FoodItemDetailsScreen  
+        FoodDetail:FoodItemDetailsScreen,
+        RestaurantDetail:RestaurantDetailScreen  
     },defaultNavConfiguration
 );
 
@@ -44,6 +46,8 @@ const FavoritesNavigator=createStackNavigator(
 const RestaurantsNavigator=createStackNavigator(
     {    
         Restaurants:RestaurantsScreen,
+        RestaurantDetail:RestaurantDetailScreen,
+        FoodDetail:FoodItemDetailsScreen
     },defaultNavConfiguration
 );
 

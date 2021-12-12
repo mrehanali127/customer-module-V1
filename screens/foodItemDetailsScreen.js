@@ -1,32 +1,43 @@
 import React,{useEffect,useState,useCallback} from "react";
+import axios from "axios";
 import { ScrollView, View,Text,StyleSheet, Button,Image,ImageBackground,Dimensions} from "react-native";
 import Colors from "../constants/Colors";
 import { MaterialIcons } from '@expo/vector-icons';
 import { HeaderButtons,Item } from "react-navigation-header-buttons";
 import CustomHeaderButton from '../components/customHeaderButton';
 import KitchenCard from "../components/kitchenCard1";
+import CustomButton from "../components/customButton";
 import IP from "../constants/IP";
 
 const FoodItemDetailsScreen=(props)=>{
 
-    const mealId=props.navigation.getParam('mealId');
-    const mealsData=props.navigation.getParam('mealData');
-    const kitchenName=props.navigation.getParam('kitchenName');
-    console.log(kitchenName);
-    const selectedMeal=mealsData.filter(food=>food.dish_id===mealId);
+      const[isLoading,setLoading]=useState(true);
+      const[kitchens,setKitchens]=useState([]);
 
-    const [isLoading,setLoading]=useState(true);
-    const [kitchen,setKitchen]=useState([]);
-
-    useEffect(()=>{
+      useEffect(()=>{
+        const kitchenName=props.navigation.getParam('kitchenName');
         fetch(`http://${IP.ip}:3000/kitchen/${kitchenName}`)
         .then((response)=>response.json())
-        .then((response)=>setKitchen(response))
+        .then((response)=>setKitchens(response))
         .catch((error)=>console.error(error))
         .finally(()=>setLoading(false));
       },[]);
-    
-    
+
+      //console.log(kitchens);
+
+      const mealId=props.navigation.getParam('mealId');
+      const mealsData=props.navigation.getParam('mealData');
+      const kitchenName=props.navigation.getParam('kitchenName');
+      //console.log(kitchenName);
+      const selectedMeal=mealsData.filter(food=>food.dish_id===mealId);
+      //const selectedKitchen=kitchens.filter(kitchen=>kitchen.kitchen_name===kitchenName);
+      //console.log(selectedKitchen);
+
+
+     
+
+
+
     return(
         <ScrollView showsVerticalScrollIndicator={false}>
         <View>
@@ -48,7 +59,10 @@ const FoodItemDetailsScreen=(props)=>{
             <Text style={styles.price}>Rs.{selectedMeal[0].price}</Text>
             <Text style={styles.category}>Category: {selectedMeal[0].cat_name}</Text>
         </View>
+        <View style={styles.descButton}>
         <Text style={styles.title}>Description</Text>
+        <CustomButton color={Colors.primaryColor} onSelect={()=>{}}/>
+        </View>
         <View>
        <Text style={styles.description}>
            {selectedMeal[0].description}
@@ -56,7 +70,23 @@ const FoodItemDetailsScreen=(props)=>{
         </View>
         </View>
         </View>
-        <KitchenCard kitchenName={selectedMeal[0].kitchen_name}/>
+        {kitchens.length>0 &&
+        <KitchenCard kitchenName={kitchens[0].kitchen_name} kitchenLogo={kitchens[0].logo}
+        startTime={kitchens[0].start_time} endTime={kitchens[0].end_time} 
+        onSelect={()=>{           
+            props.navigation.navigate({
+                routeName:'RestaurantDetail',
+                params:{
+                    kitchenName:kitchens[0].kitchen_name,
+                    kitchenLogo:kitchens[0].logo,
+                    startTime:kitchens[0].start_time,
+                    endTime:kitchens[0].end_time
+                }
+            });
+           }
+        }
+        />
+        }
     </ScrollView>
  )
 };
@@ -128,6 +158,11 @@ const styles=StyleSheet.create(
         backgroundColor:'rgba(0,0,0,0.5)',
         paddingVertical:5,
         paddingHorizontal:10,
+    },
+    descButton:{
+        width:'100%',
+        flexDirection:'row',
+        justifyContent:'space-between'
     },
 
     Item:{

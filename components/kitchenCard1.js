@@ -33,7 +33,18 @@ const KitchenCard=props=>{
         <View>
             <Text style={styles.dishes}>Chicken Biryani, Chicken Karahi</Text>
         </View>
+        <View style={styles.timeDetail}>
+            <View style={styles.time}>
+                <Text style={styles.timeHead}>START TIME</Text>
+                <Text style={styles.timeData}>{props.startTime}</Text>
+            </View>
+            <View style={styles.time}>
+                <Text style={styles.timeHead}>END TIME</Text>
+                <Text style={styles.timeData}>{props.endTime}</Text>
+            </View>
         </View>
+        </View>
+        
         </TouchableOpacity>
         </View>
     )
@@ -43,7 +54,7 @@ const styles=StyleSheet.create({
 
 
     kitchenCard:{
-         height:150,
+         height:180,
          width:'95%',
          backgroundColor:'#f5f5f5',
          borderRadius:15,
@@ -54,7 +65,7 @@ const styles=StyleSheet.create({
        
     },
     kitchenHeader:{
-        height:'70%',
+        height:'55%',
         width:'100%',
         padding:15,
         flexDirection:'row',
@@ -97,6 +108,17 @@ const styles=StyleSheet.create({
         color:Colors.primaryColor,
         paddingTop:10,
     },
+    timeDetail:{
+        flexDirection:'row',
+        justifyContent:'space-between'
+       
+    },
+    timeHead:{
+        color:Colors.primaryColor
+    },
+    timeData:{
+        color:Colors.lightBlack
+    }
 
 });
 

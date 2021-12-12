@@ -21,19 +21,20 @@ const RestaurantsScreen=(props)=>{
 
       const renderKitchenCard=(itemData)=>{
         return(
-           <KitchenCard kitchenName={itemData.item.kitchen_name} kitchenLogo={itemData.item.logo} start_time={itemData.item.start_time}
-            end_time={itemData.item.end_time}
+           <KitchenCard kitchenName={itemData.item.kitchen_name} kitchenLogo={itemData.item.logo} startTime={itemData.item.start_time}
+            endTime={itemData.item.end_time}
             onSelect={()=>{
-                /*
                 props.navigation.navigate({
-                    routeName:'FoodDetail',
+                    routeName:'RestaurantDetail',
                     params:{
-                        mealId:itemData.item.dish_id,
-                        mealData:mealsData
+                      kitchenName:itemData.item.kitchen_name,
+                      kitchenLogo:itemData.item.logo,
+                      startTime:itemData.item.start_time,
+                      endTime:itemData.item.end_time
 
 
                     }
-                });*/
+                });
                }
             }/>
         )
