@@ -31,7 +31,8 @@ const SearchBarHeader=props=>{
             </View>
             <View style={styles.categoriesScroll}>
                
-                <FlatList horizontal data={Categories} renderItem={renderCatItem} keyExtractor={(item) => item}/>
+                <FlatList horizontal data={Categories} renderItem={renderCatItem} keyExtractor={(item) => item}
+                showsHorizontalScrollIndicator={false}/>
             </View>
         </View>
     )

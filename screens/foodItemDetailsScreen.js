@@ -4,17 +4,31 @@ import Colors from "../constants/Colors";
 import { MaterialIcons } from '@expo/vector-icons';
 import { HeaderButtons,Item } from "react-navigation-header-buttons";
 import CustomHeaderButton from '../components/customHeaderButton';
+import KitchenCard from "../components/kitchenCard1";
 import IP from "../constants/IP";
 
 const FoodItemDetailsScreen=(props)=>{
 
     const mealId=props.navigation.getParam('mealId');
     const mealsData=props.navigation.getParam('mealData');
+    const kitchenName=props.navigation.getParam('kitchenName');
+    console.log(kitchenName);
     const selectedMeal=mealsData.filter(food=>food.dish_id===mealId);
+
+    const [isLoading,setLoading]=useState(true);
+    const [kitchen,setKitchen]=useState([]);
+
+    useEffect(()=>{
+        fetch(`http://${IP.ip}:3000/kitchen/${kitchenName}`)
+        .then((response)=>response.json())
+        .then((response)=>setKitchen(response))
+        .catch((error)=>console.error(error))
+        .finally(()=>setLoading(false));
+      },[]);
     
     
     return(
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
         <View>
         <View style={styles.foodItem}>
          <View style={{...styles.foodRow,...styles.foodHeader}}>
@@ -42,9 +56,11 @@ const FoodItemDetailsScreen=(props)=>{
         </View>
         </View>
         </View>
+        <KitchenCard kitchenName={selectedMeal[0].kitchen_name}/>
     </ScrollView>
  )
 };
+
 
 
 

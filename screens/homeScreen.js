@@ -33,6 +33,7 @@ const HomeScreen=(props)=>{
                     routeName:'FoodDetail',
                     params:{
                         mealId:itemData.item.dish_id,
+                        kitchenName:itemData.item.kitchen_name,
                         mealData:mealsData
 
 
@@ -53,7 +54,8 @@ const HomeScreen=(props)=>{
           </View>
           <View style={styles.mealsContainer}>
           
-          <FlatList data={mealsData} renderItem={renderFoodItem}/>
+          <FlatList data={mealsData} renderItem={renderFoodItem} keyExtractor={(item)=>item.dish_id}
+          showsVerticalScrollIndicator={false}/>
           
           </View>
           </View>
