@@ -6,7 +6,7 @@ const CustomButton=(props)=>{
     return(
         <TouchableOpacity style={styles.buttonItem} onPress={props.onSelect}>
         <View style={{...styles.container,...{backgroundColor:props.color}}}>
-            <Text style={styles.category}>ADD TO CART</Text>
+            <Text style={styles.category}>{props.title}</Text>
         </View>
         </TouchableOpacity>
     )

@@ -61,7 +61,7 @@ const FoodItemDetailsScreen=(props)=>{
         </View>
         <View style={styles.descButton}>
         <Text style={styles.title}>Description</Text>
-        <CustomButton color={Colors.primaryColor} onSelect={()=>{}}/>
+        <CustomButton color={Colors.primaryColor} onSelect={()=>{}} title="ADD TO CART"/>
         </View>
         <View>
        <Text style={styles.description}>
