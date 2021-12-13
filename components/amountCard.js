@@ -11,16 +11,17 @@ const  AmountCard=props=>{
         <View style={styles.amountCard}>
             <View style={styles.amountContainer}> 
                 <Text style={styles.amountSub}>Sub Total :</Text>
-                <Text style={styles.amountSub}>Rs. 100</Text>
+                <Text style={styles.amountSub}>Rs. {props.subTotal}</Text>
             </View>
             <View style={styles.amountContainer}>
                 <Text style={styles.amountSub}>Delivery Charges :</Text>
-                <Text style={styles.amountSub}>Rs. 20</Text>
+                <Text style={styles.amountSub}>Rs. {props.deliveryCharges}</Text>
             </View>
             <View style={styles.amountContainer}>
                 <Text style={styles.amount}>Grand Total :</Text>
-                <Text style={styles.amount}>Rs. 120</Text>
+                <Text style={styles.amount}>Rs. {props.grandTotal}</Text>
             </View>
+            {props.proceed &&
             <View style={styles.btnContainer}>
             <TouchableOpacity onPress={props.onSelect}>
                 <View style={styles.buttonContainer}>
@@ -29,6 +30,7 @@ const  AmountCard=props=>{
                 </View>
             </TouchableOpacity>
             </View>
+            }
         </View>
     )
 };
@@ -37,7 +39,6 @@ const styles=StyleSheet.create({
 
 
     amountCard:{
-         height:130,
          width:'95%',
          backgroundColor:'#f5f5f5',
          borderRadius:15,

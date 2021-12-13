@@ -16,6 +16,7 @@ import ProfileScreen from '../screens/profileScreen';
 import RestaurantsScreen from '../screens/restaurantsScreen';
 import RestaurantDetailScreen from '../screens/restaurantDetailScreen';
 import FoodItemDetailsScreen from '../screens/foodItemDetailsScreen';
+import CheckoutScreen from '../screens/checkoutScreen';
 
 
 const defaultNavConfiguration= {
@@ -54,6 +55,7 @@ const RestaurantsNavigator=createStackNavigator(
 const CartNavigator=createStackNavigator(
     {  
         Cart:CartScreen,
+        Checkout:CheckoutScreen
     },defaultNavConfiguration
 );
 
