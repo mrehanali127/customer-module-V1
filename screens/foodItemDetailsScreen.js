@@ -33,8 +33,28 @@ const FoodItemDetailsScreen=(props)=>{
       //const selectedKitchen=kitchens.filter(kitchen=>kitchen.kitchen_name===kitchenName);
       //console.log(selectedKitchen);
 
+      const addItemToCart=()=>{
+        let url=`http://${IP.ip}:3000/cart`;
+        let data={
+            customerId:'03082562292',
+            dishId:selectedMeal[0].dish_id,
+            quantity:1,
+            kitchenName:selectedMeal[0].kitchen_name,
+            totalAmount:selectedMeal[0].price
 
-     
+        }
+        fetch(url,{
+            method:'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+              },
+            body:JSON.stringify(data)
+        }).then((response)=>response.json())
+        .then(()=>console.log("DATA Inserted"))
+        .catch((error)=>console.log(error));
+
+    }
 
 
 
@@ -61,7 +81,7 @@ const FoodItemDetailsScreen=(props)=>{
         </View>
         <View style={styles.descButton}>
         <Text style={styles.title}>Description</Text>
-        <CustomButton color={Colors.primaryColor} onSelect={()=>{}} title="ADD TO CART"/>
+        <CustomButton color={Colors.primaryColor} onSelect={addItemToCart} title="ADD TO CART"/>
         </View>
         <View>
        <Text style={styles.description}>
