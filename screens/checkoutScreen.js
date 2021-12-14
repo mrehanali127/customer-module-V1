@@ -19,9 +19,7 @@ const CheckoutScreen=(props)=>{
         return(
           <ScrollView>
           <View style={styles.screen}>
-               <AmountCard subTotal={100} deliveryCharges={20} grandTotal={120}
-            proceed={false}
-            />
+             
             <AddressCard/>
         
             <View style={styles.card}>
@@ -30,7 +28,11 @@ const CheckoutScreen=(props)=>{
                 <Text style={styles.paymentType}>Cash On Delivery</Text>
             </View>
             </View>
+            
 
+            <AmountCard subTotal={100} deliveryCharges={20} grandTotal={120}
+            proceed={false}
+            />
 
             <View style={styles.btnContainer}>
             <TouchableOpacity onPress={showAlert}>

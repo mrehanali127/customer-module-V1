@@ -1,6 +1,6 @@
 import React,{useEffect,useState,useCallback} from "react";
 import axios from "axios";
-import { ScrollView, View,Text,StyleSheet, Button,Image,ImageBackground,Dimensions} from "react-native";
+import { ScrollView, View,Text,StyleSheet, Button,Image,ImageBackground,Dimensions,ToastAndroid} from "react-native";
 import Colors from "../constants/Colors";
 import { MaterialIcons } from '@expo/vector-icons';
 import { HeaderButtons,Item } from "react-navigation-header-buttons";
@@ -37,7 +37,7 @@ const FoodItemDetailsScreen=(props)=>{
         let url=`http://${IP.ip}:3000/cart`;
         let data={
             customerId:'03082562292',
-            dishId:selectedMeal[0].dish_id,
+            dishName:selectedMeal[0].dish_name,
             quantity:1,
             kitchenName:selectedMeal[0].kitchen_name,
             totalAmount:selectedMeal[0].price
@@ -51,7 +51,7 @@ const FoodItemDetailsScreen=(props)=>{
               },
             body:JSON.stringify(data)
         }).then((response)=>response.json())
-        .then(()=>console.log("DATA Inserted"))
+        .then(()=>ToastAndroid.show(`${selectedMeal[0].dish_name} Added to Cart`, ToastAndroid.SHORT))
         .catch((error)=>console.log(error));
 
     }

@@ -21,15 +21,15 @@ const  CartItem=props=>{
             <View>
                 <View style={styles.itemCount}>
                     <TouchableOpacity>
-                    <View style={styles.plus}><Text style={styles.incDec}>+</Text></View>
+                    <View style={styles.minus}><Text style={styles.incDec}>-</Text></View>
                     </TouchableOpacity>
                     <View style={styles.counter}><Text style={styles.incDec}>1</Text></View>
                     <TouchableOpacity>
-                    <View style={styles.minus}><Text style={styles.incDec}>-</Text></View>
+                    <View style={styles.plus}><Text style={styles.incDec}>+</Text></View>
                     </TouchableOpacity>
                 </View>
             </View>
-            <AntDesign name="delete" size={20} color={Colors.primaryColor} />
+            <AntDesign name="delete" size={20} color={Colors.primaryColor} style={styles.deleteIcon} />
             </View>
         </View>
         </View>
@@ -53,7 +53,7 @@ const styles=StyleSheet.create({
     },
     itemHeader:{
         height:'100%',
-        width:'90%',
+        width:'100%',
         padding:15,
         flexDirection:'row',
       
@@ -100,16 +100,16 @@ const styles=StyleSheet.create({
     },
     buttonsContainer:{
         flexDirection:'row',
-        justifyContent:'space-between'
+        justifyContent:'space-between',
     },
-    plus:{
+    minus:{
         backgroundColor:Colors.primaryColor,
         width:40,
         borderTopLeftRadius:15,
         borderBottomLeftRadius:15,
         alignItems:'center'
     },
-    minus:{
+    plus:{
         backgroundColor:Colors.primaryColor,
         width:40,
         borderBottomEndRadius:15,
@@ -127,6 +127,9 @@ const styles=StyleSheet.create({
     },
     itemCount:{
         flexDirection:'row',
+    },
+    deleteIcon:{
+        width:'30%'
     }
 
 
