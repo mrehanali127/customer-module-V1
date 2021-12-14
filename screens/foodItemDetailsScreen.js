@@ -37,10 +37,9 @@ const FoodItemDetailsScreen=(props)=>{
         let url=`http://${IP.ip}:3000/cart`;
         let data={
             customerId:'03082562292',
-            dishName:selectedMeal[0].dish_name,
+            dishId:selectedMeal[0].dish_id,
             quantity:1,
-            kitchenName:selectedMeal[0].kitchen_name,
-            totalAmount:selectedMeal[0].price
+            totalAmount:selectedMeal[0].price*1
 
         }
         fetch(url,{

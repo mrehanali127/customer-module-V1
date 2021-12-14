@@ -12,6 +12,20 @@ const CartScreen=(props)=>{
 
     const[isLoading,setLoading]=useState(true);
     const[cartItems,setCartItems]=useState([]);
+    const[listedLoading,setListedLoading]=useState(true);
+    const[SubTotal,setSubTotal]=useState([]);
+    const[subLoading,setSubLoading]=useState(true);
+    const[shortListedItems,setShortListedItems]=useState([]);
+
+    useEffect(()=>{
+        fetch(`http://${IP.ip}:3000/dish`)
+        .then((response)=>response.json())
+        .then((response)=>setShortListedItems(response))
+        .then(()=>console.log("jy"))
+        .then(()=>console.log(shortListedItems))
+        .catch((error)=>console.error(error))
+        .finally(()=>setListedLoading(false));
+      },[]);
 
       useEffect(()=>{
        // const customerId=props.navigation.getParam('customerId');
@@ -23,12 +37,27 @@ const CartScreen=(props)=>{
         .finally(()=>setLoading(false));
       },[]);
 
+      /*useEffect(()=>{
+        const customerId='03082562292';
+         fetch(`http://${IP.ip}:3000/cart/subtotal/${customerId}`)
+         .then((response)=>response.json())
+         .then((response)=>setSubTotal(response))
+         .then(()=>console.log(SubTotal))
+         .catch((error)=>console.error(error))
+         .finally(()=>setSubLoading(false));
+       },[]);*/
+ 
 
-
+     
+        
     const renderCartItem=(itemData)=>{
+            const dishId=itemData.item.dish_id; 
+            const item=shortListedItems.filter(item=>item.dish_id===dishId);
+            const cart_item=item[0];
+
         return(
-            <CartItem restaurantName={itemData.item.kitchen_name} dishName={itemData.item.dish_name} 
-            price={itemData.item.total_amount} image="https://hamariweb.com/recipes/images/recipeimages/3464.jpg"
+            <CartItem restaurantName={cart_item.kitchen_name} dishName={cart_item.dish_name} 
+            price={cart_item.price} image={cart_item.image}
             onSelect={()=>{}}/>
         )
     }
@@ -37,7 +66,7 @@ const CartScreen=(props)=>{
         return(
           <View style={styles.screen}>
 
-            <FlatList data={cartItems} renderItem={renderCartItem} keyExtractor={(item)=>item.dish_name}
+            <FlatList data={cartItems} renderItem={renderCartItem} keyExtractor={(item)=>item.dish_id}
           showsVerticalScrollIndicator={false}/>
             <AmountCard subTotal={100} deliveryCharges={20} grandTotal={120}
             proceed={true}

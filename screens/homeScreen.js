@@ -14,6 +14,8 @@ const HomeScreen=(props)=>{
     const [isLoading,setLoading]=useState(true);
     const [mealsData,setmealsData]=useState([]);
 
+    
+
     useEffect(()=>{
         fetch(`http://${IP.ip}:3000/dish`)
         .then((response)=>response.json())
@@ -21,6 +23,8 @@ const HomeScreen=(props)=>{
         .catch((error)=>console.error(error))
         .finally(()=>setLoading(false));
       },[]);
+
+    
 
     
       const renderFoodItem=(itemData)=>{
