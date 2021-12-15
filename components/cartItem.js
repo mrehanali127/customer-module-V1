@@ -3,9 +3,12 @@ import { Text,View,StyleSheet,TouchableOpacity,Image,ImageBackground} from 'reac
 import { FontAwesome } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import Colors from "../constants/Colors";
+import IP from "../constants/IP";
 
 
 const  CartItem=props=>{
+
+
    
     return(
         <View style={styles.cartItem}>
@@ -29,7 +32,9 @@ const  CartItem=props=>{
                     </TouchableOpacity>
                 </View>
             </View>
-            <AntDesign name="delete" size={20} color={Colors.primaryColor} style={styles.deleteIcon} />
+            <TouchableOpacity style={styles.deleteIcon} onPress={props.onSelect}>
+            <AntDesign name="delete" size={20} color={Colors.primaryColor}  />
+            </TouchableOpacity>
             </View>
         </View>
         </View>

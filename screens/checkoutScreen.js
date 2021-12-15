@@ -9,8 +9,12 @@ import { useEffect, useState } from "react";
 
 const CheckoutScreen=(props)=>{
 
+    const subTotal=props.navigation.getParam('subTotal');
+    const deliveryCharges=props.navigation.getParam('deliveryCharges');
+    const grandTotal=props.navigation.getParam('grandTotal');
+
         const showAlert=()=>{
-            Alert.alert("You Placed the Order!",`Order#:.....\nOrdered On ..........\nTotal Items: ......\nReciever Name : .........\nContact Number :.........\nCompplete Address :........`,[{
+            Alert.alert("You Placed the Order!",`Order#:233212\nOrdered On: 08:00:00\nTotal Items: 03\nReciever Name : Rehan Ali\nContact Number : 03082562292\nCompplete Address : Mianwali`,[{
                 text:'Okey!',
                 style:'cancel'
             }]);
@@ -30,7 +34,7 @@ const CheckoutScreen=(props)=>{
             </View>
             
 
-            <AmountCard subTotal={100} deliveryCharges={20} grandTotal={120}
+            <AmountCard subTotal={subTotal} deliveryCharges={deliveryCharges} grandTotal={grandTotal}
             proceed={false}
             />
 
