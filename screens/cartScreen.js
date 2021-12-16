@@ -38,10 +38,9 @@ const CartScreen=(props)=>{
         .finally(()=>setLoading(false));
       },[cartItems]);
 
-      let countCartItems=cartItems.length;
-      var deliveryCharges=20*countCartItems;
-
-      /*useEffect(()=>{
+      
+      /*
+      useEffect(()=>{
         const customerId='03082562292';
          fetch(`http://${IP.ip}:3000/cart/subtotal/${customerId}`)
          .then((response)=>response.json())
@@ -49,31 +48,11 @@ const CartScreen=(props)=>{
          .then(()=>console.log(SubTotal))
          .catch((error)=>console.error(error))
          .finally(()=>setSubLoading(false));
-       },[]);*/
+       },[SubTotal]);*/
+
+       let countCartItems=cartItems.length;
+      var deliveryCharges=20*countCartItems;
  
-    const deleteCartItem=(dishId)=>{
-        let url=`http://${IP.ip}:3000/cart`;
-        let data={
-            itemId:dishId
-        }
-        fetch(url,{
-            method:'DELETE',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-              },
-            body:JSON.stringify(data)
-        }).then((response)=>response.json())
-        .then(()=>console.log("Item Deleted"))
-        .then(()=>{
-          if(cartItems.length<1){
-            setSumSubTotal(0);
-          }
-        })
-        .catch((error)=>console.log(error));
-
-    }
-
      
         
     const renderCartItem=(itemData)=>{
@@ -82,6 +61,7 @@ const CartScreen=(props)=>{
             const cart_item=item[0];
             subTotal+=cart_item.price;
             setSumSubTotal(subTotal);
+            
 
         return(
             <CartItem restaurantName={cart_item.kitchen_name} dishName={cart_item.dish_name} 

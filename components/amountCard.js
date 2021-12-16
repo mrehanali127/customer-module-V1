@@ -11,7 +11,7 @@ const  AmountCard=props=>{
         <View style={styles.amountCard}>
             <View style={styles.amountContainer}> 
                 <Text style={styles.amountSub}>Sub Total :</Text>
-                <Text style={styles.amountSub}>Rs. {props.subTotal}</Text>
+                <Text style={styles.amountSub}>Rs. {props.deliveryCharges===0?0:props.subTotal}</Text>
             </View>
             <View style={styles.amountContainer}>
                 <Text style={styles.amountSub}>Delivery Charges :</Text>
@@ -19,12 +19,12 @@ const  AmountCard=props=>{
             </View>
             <View style={styles.amountContainer}>
                 <Text style={styles.amount}>Grand Total :</Text>
-                <Text style={styles.amount}>Rs. {props.grandTotal}</Text>
+                <Text style={styles.amount}>Rs. {props.deliveryCharges===0 ?0:props.grandTotal}</Text>
             </View>
             {props.proceed &&
             <View style={styles.btnContainer}>
-            <TouchableOpacity onPress={props.onSelect}>
-                <View style={styles.buttonContainer}>
+            <TouchableOpacity onPress={props.onSelect} disabled={props.deliveryCharges===0?true:false}>
+                <View style={{...styles.buttonContainer,...{opacity:props.deliveryCharges===0?0.5:1}}}>
                     <Text style={styles.btnTitle}>PROCEED</Text>
                     <FontAwesome5 name="arrow-right" size={18} color={Colors.whiteColor} />
                 </View>

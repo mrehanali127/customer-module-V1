@@ -32,7 +32,7 @@ const  CartItem=props=>{
                     </TouchableOpacity>
                 </View>
             </View>
-            <TouchableOpacity style={styles.deleteIcon} onPress={props.onSelect}>
+            <TouchableOpacity style={styles.deleteIcon} onPress={props.onSelect} >
             <AntDesign name="delete" size={20} color={Colors.primaryColor}  />
             </TouchableOpacity>
             </View>
