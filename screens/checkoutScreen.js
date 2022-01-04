@@ -3,6 +3,7 @@ import { View,Text,StyleSheet, Button,Alert,TouchableOpacity,ScrollView } from "
 import Colors from '../constants/Colors';
 import AmountCard from "../components/amountCard";
 import AddressCard from "../components/deliveryAddress";
+import IP from "../constants/IP";
 import { HeaderButtons,Item } from "react-navigation-header-buttons";
 import { useEffect, useState } from "react";
 
@@ -12,6 +13,31 @@ const CheckoutScreen=(props)=>{
     const subTotal=props.navigation.getParam('subTotal');
     const deliveryCharges=props.navigation.getParam('deliveryCharges');
     const grandTotal=props.navigation.getParam('grandTotal');
+    //let today = new Date();
+    //let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+    
+    const placeOrder=()=>{
+        let url=`http://${IP.ip}:3000/order`;
+        let data={
+            customerId:'03082562292',
+            chefId:'03154562292',
+            totalAmount:grandTotal,
+            status:'pending'
+
+        }
+        fetch(url,{
+            method:'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+              },
+            body:JSON.stringify(data)
+        }).then((response)=>response.json())
+        .then(()=>ToastAndroid.show(`Order placed successfully`, ToastAndroid.SHORT))
+        .catch((error)=>console.log(error));
+        showAlert();
+
+    }
 
         const showAlert=()=>{
             Alert.alert("You Placed the Order!",`Order#:233212\nOrdered On: 08:00:00\nTotal Items: 03\nReciever Name : Rehan Ali\nContact Number : 03082562292\nCompplete Address : Mianwali`,[{
@@ -39,7 +65,7 @@ const CheckoutScreen=(props)=>{
             />
 
             <View style={styles.btnContainer}>
-            <TouchableOpacity onPress={showAlert}>
+            <TouchableOpacity onPress={placeOrder}>
                 <View style={styles.buttonContainer}>
                     <Text style={styles.btnTitle}>PLACE ORDER</Text>
                 </View>
