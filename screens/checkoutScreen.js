@@ -1,5 +1,5 @@
 import React from "react";
-import { View,Text,StyleSheet, Button,Alert,TouchableOpacity,ScrollView } from "react-native";
+import { View,Text,StyleSheet, Button,Alert,TouchableOpacity,ScrollView,ToastAndroid } from "react-native";
 import Colors from '../constants/Colors';
 import AmountCard from "../components/amountCard";
 import AddressCard from "../components/deliveryAddress";
@@ -13,6 +13,7 @@ const CheckoutScreen=(props)=>{
     const subTotal=props.navigation.getParam('subTotal');
     const deliveryCharges=props.navigation.getParam('deliveryCharges');
     const grandTotal=props.navigation.getParam('grandTotal');
+    let responseAfterPlacement;
     //let today = new Date();
     //let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     
@@ -33,6 +34,10 @@ const CheckoutScreen=(props)=>{
               },
             body:JSON.stringify(data)
         }).then((response)=>response.json())
+        .then((response)=>{
+            responseAfterPlacement=response;
+            console.log(responseAfterPlacement.insertId);
+            })
         .then(()=>ToastAndroid.show(`Order placed successfully`, ToastAndroid.SHORT))
         .catch((error)=>console.log(error));
         showAlert();
