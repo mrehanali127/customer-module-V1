@@ -6,6 +6,8 @@ import AddressCard from "../components/deliveryAddress";
 import IP from "../constants/IP";
 import { HeaderButtons,Item } from "react-navigation-header-buttons";
 import { useEffect, useState } from "react";
+import * as Notifications from 'expo-notifications';
+import * as Permissions from 'expo-permissions';
 
 
 const CheckoutScreen=(props)=>{
@@ -14,9 +16,36 @@ const CheckoutScreen=(props)=>{
     const deliveryCharges=props.navigation.getParam('deliveryCharges');
     const grandTotal=props.navigation.getParam('grandTotal');
     const tokens=props.navigation.getParam('tokens');
+    //const [token,setToken]=useState('');
     let responseAfterPlacement;
     //let today = new Date();
     //let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+    useEffect(()=>{
+        Permissions.getAsync(Permissions.NOTIFICATIONS)
+        .then((statusObj)=>{
+          if(statusObj.status!=='granted'){
+            return Permissions.askAsync(Permissions.NOTIFICATIONS);
+          }
+          return statusObj;  
+        })
+        .then((statusObj)=>{
+          if(statusObj.status!=='granted'){
+            throw new Error('Permission not granted');
+          }
+        })
+        .then(()=>{
+           return Notifications.getExpoPushTokenAsync();
+        })
+        .then(response=>{
+          console.log(response);
+          setToken(response.data);
+          console.log(token);
+        })
+        .catch((err)=>{
+          return null;
+        })
+      },[]);
+  
     
     const placeOrder=()=>{
         let url=`http://${IP.ip}:3000/order`;
@@ -40,9 +69,27 @@ const CheckoutScreen=(props)=>{
             console.log(responseAfterPlacement.insertId);
             })
         .then(()=>ToastAndroid.show(`Order placed successfully`, ToastAndroid.SHORT))
+        /*
+        .then(()=>{
+            fetch('https://exp.host/--/api/v2/push/send',{
+                    method:'POST',
+                    headers:{
+                        'Accept':'application/json',
+                        'Accept-Encoding':'gzip,deflate',
+                        'Content-Type':'application/json'
+                    },
+                    body: JSON.stringify({
+                        to:token,
+                        title:'Order was Placed',
+                        body:'Customer placed order'
+                    })
+                });
+
+        })*/
         .catch((error)=>console.log(error));
         showAlert();
-
+        sendNotificationsToChefs();
+        
     }
 
         const showAlert=()=>{
