@@ -13,6 +13,7 @@ const CheckoutScreen=(props)=>{
     const subTotal=props.navigation.getParam('subTotal');
     const deliveryCharges=props.navigation.getParam('deliveryCharges');
     const grandTotal=props.navigation.getParam('grandTotal');
+    const tokens=props.navigation.getParam('tokens');
     let responseAfterPlacement;
     //let today = new Date();
     //let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
@@ -49,6 +50,24 @@ const CheckoutScreen=(props)=>{
                 text:'Okey!',
                 style:'cancel'
             }]);
+        }
+
+        const sendNotificationsToChefs=()=>{
+            for(const token of tokens){
+                fetch('https://exp.host/--/api/v2/push/send',{
+                    method:'POST',
+                    headers:{
+                        'Accept':'application/json',
+                        'Accept-Encoding':'gzip,deflate',
+                        'Content-Type':'application/json'
+                    },
+                    body: JSON.stringify({
+                        to:token,
+                        title:'Order was Placed',
+                        body:'Customer placed order'
+                    })
+                });
+            }
         }
     
         return(

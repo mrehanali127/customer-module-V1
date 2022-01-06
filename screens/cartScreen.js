@@ -17,6 +17,7 @@ const CartScreen=(props)=>{
     const[shortListedItems,setShortListedItems]=useState([]);
     const[sumSubTotal,setSumSubTotal]=useState(0);
     var subTotal=0;
+    let listOfTokens=[];
    
     useEffect(()=>{
         fetch(`http://${IP.ip}:3000/dish`)
@@ -53,12 +54,15 @@ const CartScreen=(props)=>{
        let countCartItems=cartItems.length;
       var deliveryCharges=20*countCartItems;
  
-     
+    ////////////////////////////////////////////////////////////////////////////
+    ////////////////    Working Here    ///////////////////////////////////////
         
     const renderCartItem=(itemData)=>{
             const dishId=itemData.item.dish_id; 
             const item=shortListedItems.filter(item=>item.dish_id===dishId);
+
             const cart_item=item[0];
+            listOfTokens.push(cart_item.push_token);
             subTotal+=cart_item.price;
             setSumSubTotal(subTotal);
             
@@ -105,7 +109,8 @@ const CartScreen=(props)=>{
                     params:{
                       subTotal:sumSubTotal,
                       deliveryCharges:deliveryCharges,
-                      grandTotal:deliveryCharges+sumSubTotal
+                      grandTotal:deliveryCharges+sumSubTotal,
+                      tokens:listOfTokens
 
 
                     }
