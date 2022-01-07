@@ -2,7 +2,7 @@ import React from "react";
 import { View,Text,StyleSheet, Button, FlatList, Dimensions,TouchableOpacity,ScrollView } from "react-native";
 import Colors from '../constants/Colors';;
 import { HeaderButtons,Item } from "react-navigation-header-buttons";
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 import CartItem from "../components/cartItem";
 import AmountCard from "../components/amountCard";
 import IP from "../constants/IP";
@@ -16,8 +16,22 @@ const CartScreen=(props)=>{
     const[subLoading,setSubLoading]=useState(true);
     const[shortListedItems,setShortListedItems]=useState([]);
     const[sumSubTotal,setSumSubTotal]=useState(0);
+    //const isMounted=useRef(false);
     var subTotal=0;
     let listOfTokens=[];
+
+    useEffect(()=>{
+      // const customerId=props.navigation.getParam('customerId');
+      
+      const customerId='03082562292';
+       fetch(`http://${IP.ip}:3000/cart/${customerId}`)
+       .then((response)=>response.json())
+       .then((response)=>setCartItems(response))
+       .catch((error)=>console.error(error))
+       .finally(()=>setLoading(false));
+     
+     },[cartItems]);
+
    
     useEffect(()=>{
         fetch(`http://${IP.ip}:3000/dish`)
@@ -27,18 +41,10 @@ const CartScreen=(props)=>{
         .then(()=>console.log(shortListedItems))
         .catch((error)=>console.error(error))
         .finally(()=>setListedLoading(false));
+        //isMounted.current=true
       },[]);
 
-      useEffect(()=>{
-       // const customerId=props.navigation.getParam('customerId');
-       const customerId='03082562292';
-        fetch(`http://${IP.ip}:3000/cart/${customerId}`)
-        .then((response)=>response.json())
-        .then((response)=>setCartItems(response))
-        .catch((error)=>console.error(error))
-        .finally(()=>setLoading(false));
-      },[cartItems]);
-
+      
       
       /*
       useEffect(()=>{

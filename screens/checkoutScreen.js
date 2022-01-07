@@ -16,10 +16,14 @@ const CheckoutScreen=(props)=>{
     const deliveryCharges=props.navigation.getParam('deliveryCharges');
     const grandTotal=props.navigation.getParam('grandTotal');
     const tokens=props.navigation.getParam('tokens');
+    let sendingData={ 
+     chefId:'03154562292',
+    };
     //const [token,setToken]=useState('');
     let responseAfterPlacement;
     //let today = new Date();
     //let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+    /*
     useEffect(()=>{
         Permissions.getAsync(Permissions.NOTIFICATIONS)
         .then((statusObj)=>{
@@ -44,7 +48,7 @@ const CheckoutScreen=(props)=>{
         .catch((err)=>{
           return null;
         })
-      },[]);
+      },[]);*/
   
     
     const placeOrder=()=>{
@@ -80,8 +84,9 @@ const CheckoutScreen=(props)=>{
                     },
                     body: JSON.stringify({
                         to:token,
+                        data:sendingData,
                         title:'Order was Placed',
-                        body:'Customer placed order'
+                        body:sendingData.chefId
                     })
                 });
 
@@ -110,8 +115,11 @@ const CheckoutScreen=(props)=>{
                     },
                     body: JSON.stringify({
                         to:token,
+                        data:sendingData,
                         title:'Order was Placed',
-                        body:'Customer placed order'
+                        body:sendingData.chefId,
+                        
+                        experienceId: "@rehan.ali/chef-module-V1",
                     })
                 });
             }
