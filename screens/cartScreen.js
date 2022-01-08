@@ -19,16 +19,17 @@ const CartScreen=(props)=>{
     //const isMounted=useRef(false);
     var subTotal=0;
     let listOfTokens=[];
+    let listOfDishIds=[];
 
     useEffect(()=>{
       // const customerId=props.navigation.getParam('customerId');
-      
+      //if(isMounted){
       const customerId='03082562292';
        fetch(`http://${IP.ip}:3000/cart/${customerId}`)
        .then((response)=>response.json())
        .then((response)=>setCartItems(response))
-       .catch((error)=>console.error(error))
-       .finally(()=>setLoading(false));
+       .catch((error)=>console.error(error));
+      //}
      
      },[cartItems]);
 
@@ -66,9 +67,9 @@ const CartScreen=(props)=>{
     const renderCartItem=(itemData)=>{
             const dishId=itemData.item.dish_id; 
             const item=shortListedItems.filter(item=>item.dish_id===dishId);
-
             const cart_item=item[0];
             listOfTokens.push(cart_item.push_token);
+            listOfDishIds.push(dishId);
             subTotal+=cart_item.price;
             setSumSubTotal(subTotal);
             
@@ -116,7 +117,8 @@ const CartScreen=(props)=>{
                       subTotal:sumSubTotal,
                       deliveryCharges:deliveryCharges,
                       grandTotal:deliveryCharges+sumSubTotal,
-                      tokens:listOfTokens
+                      tokens:listOfTokens,
+                      dishIds:listOfDishIds
 
 
                     }

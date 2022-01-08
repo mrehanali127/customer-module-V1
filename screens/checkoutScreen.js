@@ -15,15 +15,18 @@ const CheckoutScreen=(props)=>{
     const subTotal=props.navigation.getParam('subTotal');
     const deliveryCharges=props.navigation.getParam('deliveryCharges');
     const grandTotal=props.navigation.getParam('grandTotal');
+    const allDishIds=props.navigation.getParam('dishIds');
     const tokens=props.navigation.getParam('tokens');
-    let sendingData={ 
-     chefId:'03154562292',
-    };
+    let notificationData;
     //const [token,setToken]=useState('');
+    //const [senderToken,setSenderToken]=useState('');
+    //const [newOrderId,setNewOrderId]=useState(0);
+    let newOrderId=0;
+    let senderToken=' ';
     let responseAfterPlacement;
     //let today = new Date();
     //let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-    /*
+    
     useEffect(()=>{
         Permissions.getAsync(Permissions.NOTIFICATIONS)
         .then((statusObj)=>{
@@ -42,13 +45,13 @@ const CheckoutScreen=(props)=>{
         })
         .then(response=>{
           console.log(response);
-          setToken(response.data);
-          console.log(token);
+          senderToken=response.data;
+          console.log(senderToken);
         })
         .catch((err)=>{
           return null;
         })
-      },[]);*/
+      },[]);
   
     
     const placeOrder=()=>{
@@ -70,7 +73,9 @@ const CheckoutScreen=(props)=>{
         }).then((response)=>response.json())
         .then((response)=>{
             responseAfterPlacement=response;
-            console.log(responseAfterPlacement.insertId);
+            newOrderId=responseAfterPlacement.insertId;
+            console.log(newOrderId);
+            addOrderDetails();
             })
         .then(()=>ToastAndroid.show(`Order placed successfully`, ToastAndroid.SHORT))
         /*
@@ -91,11 +96,40 @@ const CheckoutScreen=(props)=>{
                 });
 
         })*/
+        .then(()=>{
+            sendNotificationsToChefs();
+        })
         .catch((error)=>console.log(error));
         showAlert();
-        sendNotificationsToChefs();
+        
         
     }
+
+            const addOrderDetails=()=>{
+                console.log("Entered in addOrder Functions");
+                console.log(allDishIds);
+                let url=`http://${IP.ip}:3000/orderDetail`;
+                let data1={
+                    orderId:newOrderId,
+                    dishId:allDishIds[0],
+                    quantity:1,
+                    totalAmount:subTotal
+                }
+                console.log(data1);
+                fetch(url,{
+                    method:'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body:JSON.stringify(data1)
+                })
+                .then((response)=>response.json())
+                .then(()=>{console.log("Till here working")})
+                .then(()=>ToastAndroid.show(`Order Details have been added`, ToastAndroid.SHORT))
+                .then(()=>{console.log("Order detail API Working")})
+                .catch((error)=>console.log(error));
+        }
 
         const showAlert=()=>{
             Alert.alert("You Placed the Order!",`Order#:233212\nOrdered On: 08:00:00\nTotal Items: 03\nReciever Name : Rehan Ali\nContact Number : 03082562292\nCompplete Address : Mianwali`,[{
@@ -115,10 +149,14 @@ const CheckoutScreen=(props)=>{
                     },
                     body: JSON.stringify({
                         to:token,
-                        data:sendingData,
-                        title:'Order was Placed',
-                        body:sendingData.chefId,
-                        
+                        data:{
+                            sender:senderToken,
+                            reciever:token,
+                            orderId:newOrderId,
+                            status:false
+                        },
+                        title:'Order For You',
+                        body:"Customer placed order for your",  
                         experienceId: "@rehan.ali/chef-module-V1",
                     })
                 });
