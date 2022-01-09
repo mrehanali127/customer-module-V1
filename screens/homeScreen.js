@@ -53,7 +53,12 @@ const HomeScreen=(props)=>{
        
         <View style={styles.container}>
         <View style={styles.header}>
-        <SearchBarHeader/>
+        <SearchBarHeader onSelect={()=>{
+            props.navigation.navigate({
+                routeName:'Notifications',
+            
+            });
+        }}/>
         
           </View>
           <View style={styles.mealsContainer}>

@@ -17,6 +17,7 @@ import RestaurantsScreen from '../screens/restaurantsScreen';
 import RestaurantDetailScreen from '../screens/restaurantDetailScreen';
 import FoodItemDetailsScreen from '../screens/foodItemDetailsScreen';
 import CheckoutScreen from '../screens/checkoutScreen';
+import NotificationScreen from '../screens/notificationScreen';
 
 
 const defaultNavConfiguration= {
@@ -34,7 +35,8 @@ const HomeNavigator=createStackNavigator(
     {
         Home: HomeScreen,
         FoodDetail:FoodItemDetailsScreen,
-        RestaurantDetail:RestaurantDetailScreen  
+        RestaurantDetail:RestaurantDetailScreen,
+        Notifications:NotificationScreen  
     },defaultNavConfiguration
 );
 

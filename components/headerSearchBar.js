@@ -4,7 +4,7 @@ import Colors from "../constants/Colors";
 import React,{useState} from "react";
 import { Categories } from "../constants/categories";
 import CategoryTile from "./categoryTile";
-import { View,StyleSheet,Text,TextInput,Dimensions, ScrollView,FlatList } from "react-native";
+import { View,StyleSheet,Text,TextInput,Dimensions, ScrollView,FlatList,TouchableOpacity } from "react-native";
 import { color } from "react-native-reanimated";
 
 const SearchBarHeader=props=>{
@@ -27,7 +27,9 @@ const SearchBarHeader=props=>{
                  />
                 <Ionicons name="search" size={24} color="white"/>
                 </View>
+                <TouchableOpacity onPress={props.onSelect}>
                 <Ionicons name="ios-notifications" size={24} color="white"/>
+                </TouchableOpacity>
             </View>
             <View style={styles.categoriesScroll}>
                
