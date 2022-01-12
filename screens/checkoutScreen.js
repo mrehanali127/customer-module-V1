@@ -99,6 +99,9 @@ const CheckoutScreen=(props)=>{
         .then(()=>{
             sendNotificationsToChefs();
         })
+        .then(()=>{
+            deleteCartItems('03082562292');
+        })
         .catch((error)=>console.log(error));
         showAlert();
         
@@ -136,6 +139,24 @@ const CheckoutScreen=(props)=>{
                 text:'Okey!',
                 style:'cancel'
             }]);
+        }
+
+        const deleteCartItems=(cust_id)=>{
+            let url=`http://${IP.ip}:3000/cart/deleteCart/${cust_id}`;
+            let data={
+                    custId:cust_id
+                }
+                fetch(url,{
+                    method:'DELETE',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json'
+                      },
+                    body:JSON.stringify(data)
+                }).then((response)=>response.json())
+                .then((response)=>console.log(response))
+                .then(()=>console.log("Item Deleted"))
+                .catch((error)=>console.log(error));
         }
 
         const sendNotificationsToChefs=()=>{

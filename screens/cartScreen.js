@@ -9,31 +9,38 @@ import IP from "../constants/IP";
 
 const CartScreen=(props)=>{
 
-    const[isLoading,setLoading]=useState(true);
+    
     const[cartItems,setCartItems]=useState([]);
-    const[listedLoading,setListedLoading]=useState(true);
-    const[SubTotal,setSubTotal]=useState([]);
-    const[subLoading,setSubLoading]=useState(true);
-    const[shortListedItems,setShortListedItems]=useState([]);
     const[sumSubTotal,setSumSubTotal]=useState(0);
-    //const isMounted=useRef(false);
+    const isMounted=useRef(false);
     var subTotal=0;
     let listOfTokens=[];
     let listOfDishIds=[];
 
     useEffect(()=>{
       // const customerId=props.navigation.getParam('customerId');
-      //if(isMounted){
       const customerId='03082562292';
-       fetch(`http://${IP.ip}:3000/cart/${customerId}`)
+      fetch(`http://${IP.ip}:3000/cart/dishes/${customerId}`)
        .then((response)=>response.json())
        .then((response)=>setCartItems(response))
+       .then(()=>{console.log(cartItems)})
+       .then(()=>{console.log("API worked")})
        .catch((error)=>console.error(error));
-      //}
+   
      
      },[cartItems]);
 
-   
+     const getUpdatedData=()=>{
+      const customerId='03082562292';
+      fetch(`http://${IP.ip}:3000/cart/dishes/${customerId}`)
+       .then((response)=>response.json())
+       .then((response)=>setCartItems(response))
+       .then(()=>{console.log(cartItems)})
+       .then(()=>{console.log("API worked")})
+       .catch((error)=>console.error(error));
+     }
+
+    /*
     useEffect(()=>{
         fetch(`http://${IP.ip}:3000/dish`)
         .then((response)=>response.json())
@@ -42,21 +49,10 @@ const CartScreen=(props)=>{
         .then(()=>console.log(shortListedItems))
         .catch((error)=>console.error(error))
         .finally(()=>setListedLoading(false));
-        //isMounted.current=true
+        isMounted.current=true
       },[]);
-
+      */
       
-      
-      /*
-      useEffect(()=>{
-        const customerId='03082562292';
-         fetch(`http://${IP.ip}:3000/cart/subtotal/${customerId}`)
-         .then((response)=>response.json())
-         .then((response)=>setSubTotal(response))
-         .then(()=>console.log(SubTotal))
-         .catch((error)=>console.error(error))
-         .finally(()=>setSubLoading(false));
-       },[SubTotal]);*/
 
        let countCartItems=cartItems.length;
       var deliveryCharges=20*countCartItems;
@@ -65,25 +61,26 @@ const CartScreen=(props)=>{
     ////////////////    Working Here    ///////////////////////////////////////
         
     const renderCartItem=(itemData)=>{
-            const dishId=itemData.item.dish_id; 
-            const item=shortListedItems.filter(item=>item.dish_id===dishId);
-            const cart_item=item[0];
-            listOfTokens.push(cart_item.push_token);
-            listOfDishIds.push(dishId);
-            subTotal+=cart_item.price;
+            //const dishId=itemData.item.dish_id; 
+            //const item=shortListedItems.filter(item=>item.dish_id===dishId);
+            //const cart_item=item[0];
+            //setCartItem(item[0]);
+            listOfTokens.push(itemData.item.push_token);
+            listOfDishIds.push(itemData.item.dish_id);
+            subTotal+=itemData.item.price;
             setSumSubTotal(subTotal);
             
 
         return(
-            <CartItem restaurantName={cart_item.kitchen_name} dishName={cart_item.dish_name} 
-            price={cart_item.price} image={cart_item.image}
+            <CartItem restaurantName={itemData.item.kitchen_name} dishName={itemData.item.dish_name} 
+            price={itemData.item.price} image={itemData.item.image}
             onSelect={()=>
               {
                 console.log("Entered")
-                console.log(typeof(cart_item.dish_id));
+                //console.log(typeof(cartItem.dish_id));
                 let url=`http://${IP.ip}:3000/cart`;
                 let data={
-                    itemId:dishId
+                    itemId:itemData.item.dish_id
                 }
                 fetch(url,{
                     method:'DELETE',
@@ -95,6 +92,9 @@ const CartScreen=(props)=>{
                 }).then((response)=>response.json())
                 .then((response)=>console.log(response))
                 .then(()=>console.log("Item Deleted"))
+                .then(()=>{
+                  getUpdatedData();
+                })
                 .catch((error)=>console.log(error));
         
             }

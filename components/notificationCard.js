@@ -7,16 +7,19 @@ const  NotificationCard=props=>{
     return(
         <View style={styles.notificationCard}>
                 <Text style={styles.title}>Hurrey, We will serve You Soon!!</Text>
-                <Text style={styles.subTitle}>Your Order has been confirmed by {props.kitchenName}</Text>
+                <Text style={styles.subTitle}>Your Order has been confirmed by</Text>
+                <Text style={styles.subTitle}>{props.kitchenName}</Text>
+
                 <Text style={{...styles.title,color:Colors.primaryColor}}>Order Details</Text>
                 <View style={styles.notificationContainer}>
                 <Text style={{...styles.subTitle}}>{props.orderedDish}</Text>
                 <Text style={{...styles.subTitle}}>{props.servingSize} Person</Text>
                 </View>
-                <View style={styles.notificationContainer}>
+                {/*<View style={styles.notificationContainer}>
                 <Text style={{...styles.subTitle}}>Order Confirmed At</Text>
                 <Text style={{...styles.subTitle}}>{props.timeOfConfirmatiom}</Text>
                 </View>
+    */}
 
 
            
