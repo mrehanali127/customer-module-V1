@@ -23,8 +23,6 @@ const CartScreen=(props)=>{
       fetch(`http://${IP.ip}:3000/cart/dishes/${customerId}`)
        .then((response)=>response.json())
        .then((response)=>setCartItems(response))
-       .then(()=>{console.log(cartItems)})
-       .then(()=>{console.log("API worked")})
        .catch((error)=>console.error(error));
    
      
@@ -35,8 +33,7 @@ const CartScreen=(props)=>{
       fetch(`http://${IP.ip}:3000/cart/dishes/${customerId}`)
        .then((response)=>response.json())
        .then((response)=>setCartItems(response))
-       .then(()=>{console.log(cartItems)})
-       .then(()=>{console.log("API worked")})
+       
        .catch((error)=>console.error(error));
      }
 

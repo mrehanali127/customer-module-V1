@@ -180,8 +180,36 @@ const CheckoutScreen=(props)=>{
                         body:"Customer placed order for your",  
                         experienceId: "@rehan.ali/chef-module-V1",
                     })
-                });
+                }).then(()=>console.log("Chef's Notification Send"))
+                    .then(()=>{
+                            //send notification to Admin
+                    fetch('https://exp.host/--/api/v2/push/send',{
+                        method:'POST',
+                        headers:{
+                            'Accept':'application/json',
+                            'Accept-Encoding':'gzip,deflate',
+                            'Content-Type':'application/json'
+                        },
+                        body: JSON.stringify({
+                            to:'ExponentPushToken[jXY39COY1qo-vtkAP4_dnh]',
+                            data:{
+                                orderId:newOrderId,
+                                sender:senderToken,
+                                reciever:token,
+                                orderStatus:'pending'
+                            },
+                            title:'New Pending Order',
+                            body:`New Order Placed Order Id: #${newOrderId}`,  
+                            experienceId: "@rehan.ali/Admin-module-app-V1",
+                        })
+                    }).then(()=>{
+                        console.log("Notification Sent to Admin")
+                    })
+                    })
+
+                    
             }
+
         }
     
         return(
