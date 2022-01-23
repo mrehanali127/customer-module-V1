@@ -6,7 +6,7 @@ import React from "react";
 const  NotificationCard=props=>{
     return(
         <View style={styles.notificationCard}>
-                <Text style={styles.title}>Hurrey, We will serve You Soon!!</Text>
+                <Text style={styles.title}>{props.notTitle}</Text>
                 <Text style={styles.subTitle}>Your Order has been confirmed by</Text>
                 <Text style={styles.subTitle}>{props.kitchenName}</Text>
 

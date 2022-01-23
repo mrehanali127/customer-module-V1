@@ -27,11 +27,13 @@ const ProfileScreen=()=>{
           <View style={styles.screen}>
               <Text>Profile Screen</Text>
               <View style={styles.btnContainer}>
+            {/** 
             <TouchableOpacity onPress={sendMessage}>
                 <View style={styles.buttonContainer}>
                     <Text style={styles.btnTitle}>Send Message</Text>
                 </View>
             </TouchableOpacity>
+            */}
             </View>
           </View>
         )

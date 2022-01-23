@@ -14,20 +14,20 @@ const  AddressCard=props=>{
             </View>
             <View style={styles.addressDetails}>
                 <Text style={styles.addressInfo}>First Name :</Text>
-                <TextInput style={styles.input} defaultValue="Rehan"/>
+                <TextInput style={styles.input} defaultValue={props.firstname} editable={false}/>
             </View>
             <View style={styles.addressDetails}>
                 <Text style={styles.addressInfo}>Last Name :</Text>
-                <TextInput style={styles.input} defaultValue="Rehan"/>
+                <TextInput style={styles.input} defaultValue={props.lastname} editable={false}/>
             </View>
             <View style={styles.addressDetails}>
                 <Text style={styles.addressInfo}>Phone No  :</Text>
-                <TextInput style={styles.input} defaultValue="03082562292" editable={false}/>
+                <TextInput style={styles.input} defaultValue={props.phone} editable={false}/>
             </View>
 
             <View>
                 <Text style={styles.addressInfo}>Complete Address :</Text>
-                <TextInput style={styles.inputLines} defaultValue="Rehan" multiline={true}/>
+                <TextInput style={styles.inputLines} defaultValue={props.address} multiline={true}/>
             </View>      
         </View>
     )

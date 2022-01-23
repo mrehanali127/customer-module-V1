@@ -7,7 +7,6 @@ import IP from "../constants/IP";
 import { HeaderButtons,Item } from "react-navigation-header-buttons";
 import { useEffect, useState } from "react";
 import * as Notifications from 'expo-notifications';
-import * as Permissions from 'expo-permissions';
 
 
 const CheckoutScreen=(props)=>{
@@ -17,6 +16,7 @@ const CheckoutScreen=(props)=>{
     const grandTotal=props.navigation.getParam('grandTotal');
     const allDishIds=props.navigation.getParam('dishIds');
     const tokens=props.navigation.getParam('tokens');
+    const [addressDetails,setAddressDetails]=useState([]);
     let notificationData;
     //const [token,setToken]=useState('');
     //const [senderToken,setSenderToken]=useState('');
@@ -28,21 +28,9 @@ const CheckoutScreen=(props)=>{
     //let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     
     useEffect(()=>{
-        Permissions.getAsync(Permissions.NOTIFICATIONS)
-        .then((statusObj)=>{
-          if(statusObj.status!=='granted'){
-            return Permissions.askAsync(Permissions.NOTIFICATIONS);
-          }
-          return statusObj;  
-        })
-        .then((statusObj)=>{
-          if(statusObj.status!=='granted'){
-            throw new Error('Permission not granted');
-          }
-        })
-        .then(()=>{
-           return Notifications.getExpoPushTokenAsync();
-        })
+        const customerId='03082562292';
+      
+        Notifications.getExpoPushTokenAsync()
         .then(response=>{
           console.log(response);
           senderToken=response.data;
@@ -51,6 +39,10 @@ const CheckoutScreen=(props)=>{
         .catch((err)=>{
           return null;
         })
+        fetch(`http://${IP.ip}:3000/customer/${customerId}`)
+       .then((response)=>response.json())
+       .then((response)=>setAddressDetails(response[0]))
+       .catch((error)=>console.error(error));
       },[]);
   
     
@@ -102,8 +94,15 @@ const CheckoutScreen=(props)=>{
         .then(()=>{
             deleteCartItems('03082562292');
         })
+        .then(()=>{
+            showAlert(newOrderId,data.totalAmount,addressDetails.firstname,addressDetails.phone,addressDetails.address);
+            props.navigation.navigate({
+                routeName:'Cart',
+               
+            })
+        })
         .catch((error)=>console.log(error));
-        showAlert();
+        
         
         
     }
@@ -134,8 +133,8 @@ const CheckoutScreen=(props)=>{
                 .catch((error)=>console.log(error));
         }
 
-        const showAlert=()=>{
-            Alert.alert("You Placed the Order!",`Order#:233212\nOrdered On: 08:00:00\nTotal Items: 03\nReciever Name : Rehan Ali\nContact Number : 03082562292\nCompplete Address : Mianwali`,[{
+        const showAlert=(orderId,totalAmount,customerName,contact,address)=>{
+            Alert.alert("You Placed the Order!",`Order#: ${orderId}\nTotal Amount : Rs.${totalAmount}\nCustomer Name : ${customerName}\nContact Number : ${contact}\nCompplete Address : ${address}`,[{
                 text:'Okey!',
                 style:'cancel'
             }]);
@@ -216,8 +215,7 @@ const CheckoutScreen=(props)=>{
           <ScrollView>
           <View style={styles.screen}>
              
-            <AddressCard/>
-        
+            <AddressCard firstname={addressDetails.firstname} lastname={addressDetails.lastname} phone={addressDetails.phone} address={addressDetails.address}/>
             <View style={styles.card}>
             <View> 
                 <Text style={styles.paymentHeader}>Payment Option</Text>

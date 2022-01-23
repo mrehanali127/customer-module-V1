@@ -12,7 +12,6 @@ const NotificationScreen=(props)=>{
     const [isLoading,setLoading]=useState(true);
     const [notificationsData,setNotificationsData]=useState([]);
 
-
     useEffect(()=>{
         /*
         let fullName,dishName,orderedTime,servingSize;
@@ -66,13 +65,14 @@ const NotificationScreen=(props)=>{
        const renderNotificationCard=(itemData)=>{
             
         return(
-            <NotificationCard notificationTitle="Hey, Come here Its order for you!!"
+            <NotificationCard notTitle="Hurrey, We will serve You Soon!!"
             kitchenName={itemData.item.kitchen_name}
             orderedDish={itemData.item.dish_name}
             //timeOfConfirmation={confirmedTime}
             servingSize={itemData.item.quantity}
-            notSeen
+            //notSeen
             onSelect={()=>{
+
             }}
            />
            )
