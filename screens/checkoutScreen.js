@@ -128,7 +128,6 @@ const CheckoutScreen=(props)=>{
                 })
                 .then((response)=>response.json())
                 .then(()=>{console.log("Till here working")})
-                .then(()=>ToastAndroid.show(`Order Details have been added`, ToastAndroid.SHORT))
                 .then(()=>{console.log("Order detail API Working")})
                 .catch((error)=>console.log(error));
         }

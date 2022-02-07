@@ -1,8 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View,ToastAndroid } from 'react-native';
+import { combineReducers,createStore } from 'redux';
+import { Provider,useDispatch } from 'react-redux';
 import { useEffect,useState } from 'react';
 import HomeNavigator from './navigation/mealBottomNavigator';
+import dishReducer from './store/reducers/dishReducer';
+import { getDishes } from './store/actions/dishActions';
 import * as Notifications from 'expo-notifications';
 import IP from './constants/IP';
 
@@ -13,8 +17,31 @@ Notifications.setNotificationHandler({
   },
 });
 
+const rootReducer=combineReducers({
+      dish:dishReducer
+});
+
+const store=createStore(rootReducer);
+
 
 export default function App() {
+
+  /*
+  const [dishes,setDishes]=useState([]);
+  const dispatch=useDispatch();
+   //use Effect for Getting Data
+   useEffect(()=>{
+    fetch(`http://${IP.ip}:3000/dish`)
+    .then((response)=>response.json())
+    .then((response)=>setDishes(response))
+    .then(()=>console.log("running"))
+    .then(()=>{dispatch(getDishes(dishes))})
+
+    .catch((error)=>console.error(error))
+  },[]);
+   */
+  
+
 
   useEffect(()=>{
     const backgroundSubscription=Notifications.addNotificationResponseReceivedListener(
@@ -50,6 +77,9 @@ export default function App() {
   },[]);
 
 
+
+
+
   const addnewNotification=(orderId,sender,reciever,status)=>{
     let url=`http://${IP.ip}:3000/notifications/customerNotifications`;
     let data={
@@ -74,7 +104,9 @@ export default function App() {
 
 
   return (
+    <Provider store={store}>
     <HomeNavigator/>
+    </Provider>
   );
 }
 

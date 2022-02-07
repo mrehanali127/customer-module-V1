@@ -27,7 +27,7 @@ const FoodItemDetailsScreen=(props)=>{
 
       const mealId=props.navigation.getParam('mealId');
       const mealsData=props.navigation.getParam('mealData');
-      const kitchenName=props.navigation.getParam('kitchenName');
+      //const kitchenName=props.navigation.getParam('kitchenName');
       //console.log(kitchenName);
       const selectedMeal=mealsData.filter(food=>food.dish_id===mealId);
       //const selectedKitchen=kitchens.filter(kitchen=>kitchen.kitchen_name===kitchenName);

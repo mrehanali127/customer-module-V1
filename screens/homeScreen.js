@@ -7,6 +7,8 @@ import SearchBarHeader from "../components/headerSearchBar";
 import FoodItem from "../components/foodItem";
 import IP from "../constants/IP";
 import { useEffect, useState } from "react";
+import { useSelector,useDispatch } from "react-redux";
+import { getDishes } from "../store/actions/dishActions";
 
 
 const HomeScreen=(props)=>{
@@ -14,19 +16,23 @@ const HomeScreen=(props)=>{
     const [isLoading,setLoading]=useState(true);
     const [mealsData,setmealsData]=useState([]);
 
-    
+    //const mealsData=useSelector(state=>state.dish.Dishes);
 
+    //const [dishes,setDishes]=useState([]);
+    const dispatch=useDispatch();
+    
     useEffect(()=>{
         fetch(`http://${IP.ip}:3000/dish`)
         .then((response)=>response.json())
         .then((response)=>setmealsData(response))
+        .then(()=>dispatch(getDishes(mealsData)))
         .catch((error)=>console.error(error))
         .finally(()=>setLoading(false));
-      },[]);
-
+      },[isLoading]);
     
+    const meals=useSelector(state=>state.dish.Dishes);
+    console.log(meals);
 
-    
       const renderFoodItem=(itemData)=>{
         return(
            <FoodItem title={itemData.item.dish_name} imageUrl={itemData.item.image} kitchenName={itemData.item.kitchen_name}
@@ -104,7 +110,7 @@ const styles=StyleSheet.create(
     },
     mealsContainer:{
        width:'100%',
-       paddingBottom:100,
+      flex:1
     }
 }
 )

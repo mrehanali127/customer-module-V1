@@ -6,13 +6,19 @@ import FoodItem from "../components/foodItem";
 import KitchenCard from "../components/kitchenCard1";
 import IP from "../constants/IP";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 
 const RestaurantDetailScreen=(props)=>{
 
         const[isLoading,setLoading]=useState(true);
-        const[dishes,setDishes]=useState([]);
+        //const[dishes,setDishes]=useState([]);
 
+        const kitchenName=props.navigation.getParam('kitchenName');
+        const allDishes=useSelector(state=>state.dish.Dishes);
+        const dishes=allDishes.filter(dish=>dish.kitchen_name===kitchenName);
+
+        /*
         useEffect(()=>{
         const kitchenName=props.navigation.getParam('kitchenName');
         fetch(`http://${IP.ip}:3000/dish/kitchen/${kitchenName}`)
@@ -20,9 +26,9 @@ const RestaurantDetailScreen=(props)=>{
         .then((response)=>setDishes(response))
         .catch((error)=>console.error(error))
         .finally(()=>setLoading(false));
-        },[]);
+        },[]);*/
 
-        const kitchenName=props.navigation.getParam('kitchenName');
+        //const kitchenName=props.navigation.getParam('kitchenName');
         const kitchenLogo=props.navigation.getParam('kitchenLogo');
         const startTime=props.navigation.getParam('startTime');
         const endTime=props.navigation.getParam('endTime');
