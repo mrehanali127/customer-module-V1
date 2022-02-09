@@ -31,6 +31,7 @@ const HomeScreen=(props)=>{
       },[isLoading]);
     
     const meals=useSelector(state=>state.dish.Dishes);
+    console.log("#########################################################")
     console.log(meals);
 
       const renderFoodItem=(itemData)=>{
@@ -44,7 +45,7 @@ const HomeScreen=(props)=>{
                     params:{
                         mealId:itemData.item.dish_id,
                         kitchenName:itemData.item.kitchen_name,
-                        mealData:mealsData
+                        mealData:meals
 
 
                     }

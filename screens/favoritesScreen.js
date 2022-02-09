@@ -3,15 +3,65 @@ import { View,Text,StyleSheet, Button, FlatList, Dimensions,TouchableOpacity } f
 import Colors from '../constants/Colors';;
 import { HeaderButtons,Item } from "react-navigation-header-buttons";
 import { useEffect, useState } from "react";
+import { useSelector,useDispatch } from "react-redux";
+import FoodItem from "../components/foodItem";
+import { manageFavorites } from "../store/actions/dishActions";
+import IP from "../constants/IP";
 
+const FavoritesScreen=(props)=>{
 
-const FavoritesScreen=()=>{
-
+    const [isLoading,setLoading]=useState(true);
+    const [favIds,setFavIds]=useState([]);
+   
+    const meals=useSelector(state=>state.dish.Dishes);
     
+    const dispatch=useDispatch();
+   
+    useEffect(()=>{
+       
+        fetch(`http://${IP.ip}:3000/customer/favorites/03082562292`)
+        .then((response)=>response.json())
+        .then((response)=>setFavIds(response))
+        .then(()=>dispatch(manageFavorites(favIds)))
+        .catch((error)=>console.error(error))
+        .finally(()=>setLoading(false));
+      },[isLoading]);
+    
+        //const meals=useSelector(state=>state.dish.Dishes);
+        const favoriteMeals=[];
+        const favoritesIds=useSelector(state=>state.dish.favoritesIds);
+        for(let i=0;i<favoritesIds.length;i++){
+            console.log(favoritesIds[i].dish_id);
+            favoriteMeals.push(meals.filter(food=>food.dish_id===favoritesIds[i].dish_id)[0])
+        }
+        console.log(favoriteMeals)
+    
+
+      const renderFoodItem=(itemData)=>{
         return(
-          <View style={styles.screen}>
-              <Text>Favorites Screen</Text>
+           <FoodItem title={itemData.item.dish_name} imageUrl={itemData.item.image} kitchenName={itemData.item.kitchen_name}
+            price={itemData.item.price}
+            onSelect={()=>{    
+                props.navigation.navigate({
+                    routeName:'FoodDetail',
+                    params:{
+                        mealId:itemData.item.dish_id,
+                        kitchenName:itemData.item.kitchen_name,
+                  }
+                });
+               }
+            }/>
+        )
+    }
+
+
+        return(
+            <View style={styles.screen}>
+             <View style={styles.mealsContainer}>   
+          <FlatList data={favoriteMeals} renderItem={renderFoodItem} keyExtractor={(item)=>item.dish_id}
+          showsVerticalScrollIndicator={false}/>
           </View>
+        </View>
         )
     };
 
@@ -20,8 +70,16 @@ const styles=StyleSheet.create(
     {
         screen:{
             flex:1,
-            alignItems:'center',
-            justifyContent:'center'
+            
+        },
+        container:{
+            flex:1,
+            flexDirection:'column',
+          
+        },
+        mealsContainer:{
+           width:'100%',
+          flex:1
         }
        
     }

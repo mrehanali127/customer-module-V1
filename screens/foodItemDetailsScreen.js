@@ -1,18 +1,21 @@
 import React,{useEffect,useState,useCallback} from "react";
 import axios from "axios";
-import { ScrollView, View,Text,StyleSheet, Button,Image,ImageBackground,Dimensions,ToastAndroid} from "react-native";
+import { ScrollView, View,Text,StyleSheet, Button,Image,ImageBackground,Dimensions,ToastAndroid,TouchableOpacity} from "react-native";
 import Colors from "../constants/Colors";
 import { MaterialIcons } from '@expo/vector-icons';
 import { HeaderButtons,Item } from "react-navigation-header-buttons";
 import CustomHeaderButton from '../components/customHeaderButton';
 import KitchenCard from "../components/kitchenCard1";
 import CustomButton from "../components/customButton";
+import { useSelector,useDispatch } from "react-redux";
+import { toggleFavorite,addCartItem } from "../store/actions/dishActions";
 import IP from "../constants/IP";
 
 const FoodItemDetailsScreen=(props)=>{
 
       const[isLoading,setLoading]=useState(true);
       const[kitchens,setKitchens]=useState([]);
+      const dispatch=useDispatch();
 
       useEffect(()=>{
         const kitchenName=props.navigation.getParam('kitchenName');
@@ -26,12 +29,46 @@ const FoodItemDetailsScreen=(props)=>{
       //console.log(kitchens);
 
       const mealId=props.navigation.getParam('mealId');
-      const mealsData=props.navigation.getParam('mealData');
-      //const kitchenName=props.navigation.getParam('kitchenName');
-      //console.log(kitchenName);
+      //const mealsData=props.navigation.getParam('mealData');
+      const mealsData=useSelector(state=>state.dish.Dishes)
+      
       const selectedMeal=mealsData.filter(food=>food.dish_id===mealId);
-      //const selectedKitchen=kitchens.filter(kitchen=>kitchen.kitchen_name===kitchenName);
-      //console.log(selectedKitchen);
+      const isDishFavorite=useSelector(state=>state.dish.favoritesIds.some(dish=>dish.dish_id===mealId))
+      
+      const addNewFavorite=()=>{
+        let url=`http://${IP.ip}:3000/dish/favorites`;
+        let data={
+            customerId:'03082562292',
+            dishId:selectedMeal[0].dish_id,
+        }
+        fetch(url,{
+            method:'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+              },
+            body:JSON.stringify(data)
+        }).then((response)=>response.json())
+        .then(()=>ToastAndroid.show(`${selectedMeal[0].dish_name} Added to Favorites`, ToastAndroid.SHORT))
+        .catch((error)=>console.log(error));
+      }
+
+      const removeFromFavorite=()=>{
+      let url=`http://${IP.ip}:3000/dish/removeFavorite`;
+      let data={
+          dishId:selectedMeal[0].dish_id
+      }
+      fetch(url,{
+          method:'DELETE',
+          headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+            },
+          body:JSON.stringify(data)
+      }).then((response)=>response.json())
+      .then((response)=>console.log(response))
+      .then(()=>console.log("Item Removed From Favorite"))
+      }
 
       const addItemToCart=()=>{
         let url=`http://${IP.ip}:3000/cart`;
@@ -51,10 +88,21 @@ const FoodItemDetailsScreen=(props)=>{
             body:JSON.stringify(data)
         }).then((response)=>response.json())
         .then(()=>ToastAndroid.show(`${selectedMeal[0].dish_name} Added to Cart`, ToastAndroid.SHORT))
+        .then(()=>dispatch(addCartItem(selectedMeal[0].dish_id)))
         .catch((error)=>console.log(error));
 
     }
 
+    const handleToggleFavorite=()=>{
+        dispatch(toggleFavorite(mealId));
+        if(isDishFavorite){
+            removeFromFavorite();
+        }
+        else{
+            addNewFavorite();
+        }
+       
+    }
 
 
     return(
@@ -73,7 +121,9 @@ const FoodItemDetailsScreen=(props)=>{
         <View style={styles.details}>
             <View style={styles.kitchenNameHeader}>
             <Text style={styles.kitchenName}>{selectedMeal[0].kitchen_name}</Text>
-            <MaterialIcons name="favorite-outline" size={28} color={Colors.primaryColor} />
+            <TouchableOpacity onPress={handleToggleFavorite}>
+            <MaterialIcons name={isDishFavorite ? "favorite" :"favorite-outline"} size={28} color={Colors.primaryColor} />
+            </TouchableOpacity>
             </View>
             <Text style={styles.price}>Rs.{selectedMeal[0].price}</Text>
             <Text style={styles.category}>Category: {selectedMeal[0].cat_name}</Text>

@@ -42,7 +42,9 @@ const HomeNavigator=createStackNavigator(
 
 const FavoritesNavigator=createStackNavigator(
     {
-        Favorites:FavoritesScreen,     
+        Favorites:FavoritesScreen,
+        FoodDetail:FoodItemDetailsScreen,
+        
     },defaultNavConfiguration
 );
 
