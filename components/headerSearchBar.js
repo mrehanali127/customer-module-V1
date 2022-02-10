@@ -1,19 +1,43 @@
 import { HeaderButton } from "react-navigation-header-buttons";
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "../constants/Colors";
-import React,{useState} from "react";
+import React,{useState,useEffect} from "react";
 import { Categories } from "../constants/categories";
 import CategoryTile from "./categoryTile";
+import { useSelector,useDispatch } from "react-redux";
+import { applyCategory,getCategoricalData,searchInput } from "../store/actions/dishActions";
 import { View,StyleSheet,Text,TextInput,Dimensions, ScrollView,FlatList,TouchableOpacity } from "react-native";
 import { color } from "react-native-reanimated";
+
 
 const SearchBarHeader=props=>{
     const [value,setValue]=useState("");
     const [catColor,setCatColor]=useState("#fff");
+    const [selectedItem,setSelectedItem]=useState("All");
+    const [Style,setStyle]=useState({});
+    const dispatch=useDispatch();
+
+    const Meals=useSelector(state=>state.dish.Dishes);
+
+    useEffect(()=>{
+        dispatch(searchInput(value));
+       
+    },[dispatch,value])
+    
 
     const renderCatItem=(itemData)=>{
+        
         return(
-            <CategoryTile category={itemData.item} color={Colors.whiteColor} onSelect={()=>{
+            <CategoryTile category={itemData.item} selected={selectedItem} onSelect={()=>{
+                if(itemData.item==='All'){ 
+                    setSelectedItem('All');
+                    dispatch(getCategoricalData(Meals));   
+                }
+                else{
+                setSelectedItem(itemData.item)
+                const filteredCategory=Meals.filter(dish=>dish.cat_name===itemData.item);
+                dispatch(getCategoricalData(filteredCategory));
+                }
                 
             }}/>
          )
@@ -25,7 +49,9 @@ const SearchBarHeader=props=>{
                 <View style={styles.searchButton}>
                 <TextInput style={styles.input} value={value} onChangeText={(text)=>setValue(text)} placeholder="Search Food"
                  />
+                <TouchableOpacity onPress={props.onSearch}>
                 <Ionicons name="search" size={24} color="white"/>
+                </TouchableOpacity>
                 </View>
                 <TouchableOpacity onPress={props.onSelect}>
                 <Ionicons name="ios-notifications" size={24} color="white"/>

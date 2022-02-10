@@ -1,5 +1,5 @@
 import React from "react";
-import { View,Text,StyleSheet, Button, FlatList, Dimensions,TouchableOpacity,SafeAreaView, ScrollView} from "react-native";
+import { View,Text,StyleSheet, Button, FlatList} from "react-native";
 import Colors from '../constants/Colors';;
 import { HeaderButtons,Item } from "react-navigation-header-buttons";
 import CustomHeaderButton from "../components/customHeaderButton";
@@ -8,31 +8,44 @@ import FoodItem from "../components/foodItem";
 import IP from "../constants/IP";
 import { useEffect, useState } from "react";
 import { useSelector,useDispatch } from "react-redux";
-import { getDishes } from "../store/actions/dishActions";
+import { getDishes,getCategoricalData } from "../store/actions/dishActions";
 
 
 const HomeScreen=(props)=>{
 
     const [isLoading,setLoading]=useState(true);
     const [mealsData,setmealsData]=useState([]);
+    const [categoricalMeals,setCategoricalMeals]=useState([]);
 
     //const mealsData=useSelector(state=>state.dish.Dishes);
 
     //const [dishes,setDishes]=useState([]);
     const dispatch=useDispatch();
+    const meals=useSelector(state=>state.dish.Dishes);
+    const categories=useSelector(state=>state.dish.categoricalDishes);
+    
+    const searchingFood=useSelector(state=>state.dish.searchInput);
+    
+
+    useEffect(()=>{
+        setCategoricalMeals(categories);
+    },[categories,searchingFood])
     
     useEffect(()=>{
         fetch(`http://${IP.ip}:3000/dish`)
         .then((response)=>response.json())
         .then((response)=>setmealsData(response))
         .then(()=>dispatch(getDishes(mealsData)))
+        .then(()=>dispatch(getCategoricalData(mealsData)))
         .catch((error)=>console.error(error))
         .finally(()=>setLoading(false));
       },[isLoading]);
     
-    const meals=useSelector(state=>state.dish.Dishes);
+    
+    
     console.log("#########################################################")
     console.log(meals);
+
 
       const renderFoodItem=(itemData)=>{
         return(
@@ -65,13 +78,24 @@ const HomeScreen=(props)=>{
                 routeName:'Notifications',
             
             });
-        }}/>
+        }}
+        
+        onSearch={()=>{
+            const reg=new RegExp(searchingFood, "i");
+            setCategoricalMeals(categories.filter(dish=>reg.test(dish.dish_name)));
+           
+           console.log("////////////////   Seatch  ///////////////////")
+           console.log(categoricalMeals);
+        }}
+
+        />
         
           </View>
           <View style={styles.mealsContainer}>
           
-          <FlatList data={mealsData} renderItem={renderFoodItem} keyExtractor={(item)=>item.dish_id}
-          showsVerticalScrollIndicator={false}/>
+          <FlatList data={categoricalMeals} renderItem={renderFoodItem} keyExtractor={(item)=>item.dish_id}
+          showsVerticalScrollIndicator={false}
+          />
           
           </View>
           </View>

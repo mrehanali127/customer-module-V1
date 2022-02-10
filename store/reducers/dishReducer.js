@@ -2,7 +2,9 @@ import { GET_DISHES_DATA,GET_DISHES_OF_KITCHEN,
     MANAGE_CART_ITEMS,MANAGE_FAVORITES,
     TOGGLE_FAVORITE,REMOVE_CART_ITEM,
     ADD_CART_ITEM,EMPTY_THE_CART,
-    GET_CART_TABLE_DETAILS
+    GET_CART_TABLE_DETAILS,
+    GET_CATEGORICAL_DATA,APPLY_CATEGORY,
+    SEARCH_INPUT
  } from "../actions/dishActions";
 
 import IP from "../../constants/IP";
@@ -15,12 +17,25 @@ const initialState={
     favoritesIds:[],
     cartItems:[],
     cartTableData:[],
+    categoricalDishes:[],
+    searchInput:'',
 }
 
 const dishReducer=(state=initialState,action)=>{
     switch(action.type){
+        case SEARCH_INPUT:
+            return{...state,searchInput:action.searchItem};
+
         case GET_DISHES_DATA:
-          return {...state,Dishes:action.dishes}
+          return {...state,Dishes:action.dishes};
+        
+        case GET_CATEGORICAL_DATA:
+            return {...state,categoricalDishes:action.dishes};
+        case APPLY_CATEGORY:
+            //const ifExist=state.favoritesIds.findIndex(dish=>dish.dish_id===action.dishId);
+            //return{...state,categoricalDishes:}
+            return {...state,categoricalDishes:action.categoryItems};
+           
         case GET_DISHES_OF_KITCHEN:
             return state
         case MANAGE_FAVORITES:

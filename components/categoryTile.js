@@ -1,11 +1,14 @@
 import React from "react";
+import Colors from "../constants/Colors";
 import {Text,StyleSheet, View,Dimensions,TouchableOpacity} from 'react-native';
 
 const CategoryTile=(props)=>{
     return(
         <TouchableOpacity style={styles.gridItem} onPress={props.onSelect}>
-        <View style={{...styles.container,...{backgroundColor:props.color}}}>
-            <Text style={styles.category}>{props.category}</Text>
+        <View style={{...styles.container,...{backgroundColor:props.selected===props.category?Colors.primaryLightColor:Colors.whiteColor}}}>
+            <Text style={{...styles.category,...{color:props.selected===props.category?Colors.whiteColor:'#000',
+            fontWeight:props.selected===props.category?'bold':'normal',
+            elevation:props.selected===props.category?10:0}}}>{props.category}</Text>
         </View>
         </TouchableOpacity>
     )

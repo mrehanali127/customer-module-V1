@@ -1,4 +1,6 @@
 export const GET_DISHES_DATA='GET_DISHES_DATA';
+export const GET_CATEGORICAL_DATA='GET_CATEGORICAL_DATA';
+export const APPLY_CATEGORY='APPLY_CATEGORY';
 export const GET_DISHES_OF_KITCHEN='GET_DISHES_OF_KITCHEN';
 export const MANAGE_FAVORITES='MANAGE_FAVORITES';
 export const TOGGLE_FAVORITE='TOGGLE_FAVORITE';
@@ -7,10 +9,24 @@ export const MANAGE_CART_ITEMS='MANAGE_CART_ITEMS';
 export const REMOVE_CART_ITEM='REMOVE_CART_ITEM';
 export const ADD_CART_ITEM='ADD_CART_ITEM';
 export const EMPTY_THE_CART='EMPTY_THE_CART';
+export const SEARCH_INPUT='SEARCH_INPUT';
 //export const DECREASE_VALUE='DECREASE_VALUE';
+
+export const searchInput=(item)=>{
+    return{type:SEARCH_INPUT,searchItem:item};
+}
 
 export const getDishes=(items)=>{
     return{type:GET_DISHES_DATA,dishes:items};
+}
+
+export const getCategoricalData=(items)=>{
+    return{type:GET_CATEGORICAL_DATA,dishes:items};
+
+}
+
+export const applyCategory=(items)=>{
+    return{type:APPLY_CATEGORY,categoryItems:items};
 }
 
 export const getDishesKitchen=(kitName)=>{
