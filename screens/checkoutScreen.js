@@ -6,6 +6,8 @@ import AddressCard from "../components/deliveryAddress";
 import IP from "../constants/IP";
 import { HeaderButtons,Item } from "react-navigation-header-buttons";
 import { useEffect, useState } from "react";
+import { useSelector,useDispatch } from "react-redux";
+import { emptyTheCart,getCartData } from "../store/actions/dishActions";
 import * as Notifications from 'expo-notifications';
 
 
@@ -17,19 +19,21 @@ const CheckoutScreen=(props)=>{
     const allDishIds=props.navigation.getParam('dishIds');
     const tokens=props.navigation.getParam('tokens');
     const [addressDetails,setAddressDetails]=useState([]);
+    const [cartTable,setCartTable]=useState([]);
+    const [isLoading,setLoading]=useState(true);
     let notificationData;
-    //const [token,setToken]=useState('');
-    //const [senderToken,setSenderToken]=useState('');
-    //const [newOrderId,setNewOrderId]=useState(0);
+    const dispatch=useDispatch();
+    const cartTableRecord=useSelector(state=>state.dish.cartTableData);
+    console.log("///////////////// CART ITEMS  ////////////////")
+    console.log(cartTableRecord)
+    
     let newOrderId=0;
     let senderToken=' ';
     let responseAfterPlacement;
-    //let today = new Date();
-    //let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-    
+   
+
     useEffect(()=>{
         const customerId='03082562292';
-      
         Notifications.getExpoPushTokenAsync()
         .then(response=>{
           console.log(response);
@@ -44,8 +48,18 @@ const CheckoutScreen=(props)=>{
        .then((response)=>setAddressDetails(response[0]))
        .catch((error)=>console.error(error));
       },[]);
-  
-    
+
+      
+    useEffect(()=>{
+        const customerId='03082562292';
+        fetch(`http://${IP.ip}:3000/cart/${customerId}`)
+      .then((response)=>response.json())
+      .then((response)=>setCartTable(response))
+      .then(()=>dispatch(getCartData(cartTable)))
+      .finally(()=>setLoading(false));
+    },[isLoading])
+
+
     const placeOrder=()=>{
         let url=`http://${IP.ip}:3000/order`;
         let data={
@@ -53,7 +67,6 @@ const CheckoutScreen=(props)=>{
             chefId:'03154562292',
             totalAmount:grandTotal,
             status:'pending'
-
         }
         fetch(url,{
             method:'POST',
@@ -67,27 +80,11 @@ const CheckoutScreen=(props)=>{
             responseAfterPlacement=response;
             newOrderId=responseAfterPlacement.insertId;
             console.log(newOrderId);
-            addOrderDetails();
+            for(let i=0;i<allDishIds.length;i++){
+                addOrderDetails(allDishIds[i]);
+            }
             })
         .then(()=>ToastAndroid.show(`Order placed successfully`, ToastAndroid.SHORT))
-        /*
-        .then(()=>{
-            fetch('https://exp.host/--/api/v2/push/send',{
-                    method:'POST',
-                    headers:{
-                        'Accept':'application/json',
-                        'Accept-Encoding':'gzip,deflate',
-                        'Content-Type':'application/json'
-                    },
-                    body: JSON.stringify({
-                        to:token,
-                        data:sendingData,
-                        title:'Order was Placed',
-                        body:sendingData.chefId
-                    })
-                });
-
-        })*/
         .then(()=>{
             sendNotificationsToChefs();
         })
@@ -102,20 +99,19 @@ const CheckoutScreen=(props)=>{
             })
         })
         .catch((error)=>console.log(error));
-        
-        
-        
+            
     }
 
-            const addOrderDetails=()=>{
-                console.log("Entered in addOrder Functions");
-                console.log(allDishIds);
+
+            const addOrderDetails=(dish)=>{
+                const amountOfThisItem=cartTableRecord.filter(food=>food.dish_id===dish)
                 let url=`http://${IP.ip}:3000/orderDetail`;
                 let data1={
                     orderId:newOrderId,
-                    dishId:allDishIds[0],
+                    dishId:dish,
                     quantity:1,
-                    totalAmount:subTotal
+                    totalAmount:amountOfThisItem[0].total_amount
+                    //totalAmount:subTotal
                 }
                 console.log(data1);
                 fetch(url,{
@@ -132,12 +128,15 @@ const CheckoutScreen=(props)=>{
                 .catch((error)=>console.log(error));
         }
 
+
         const showAlert=(orderId,totalAmount,customerName,contact,address)=>{
             Alert.alert("You Placed the Order!",`Order#: ${orderId}\nTotal Amount : Rs.${totalAmount}\nCustomer Name : ${customerName}\nContact Number : ${contact}\nCompplete Address : ${address}`,[{
                 text:'Okey!',
                 style:'cancel'
             }]);
         }
+
+
 
         const deleteCartItems=(cust_id)=>{
             let url=`http://${IP.ip}:3000/cart/deleteCart/${cust_id}`;
@@ -153,9 +152,12 @@ const CheckoutScreen=(props)=>{
                     body:JSON.stringify(data)
                 }).then((response)=>response.json())
                 .then((response)=>console.log(response))
+                .then(()=>dispatch(emptyTheCart()))
                 .then(()=>console.log("Item Deleted"))
                 .catch((error)=>console.log(error));
         }
+
+
 
         const sendNotificationsToChefs=()=>{
             for(const token of tokens){
@@ -175,7 +177,7 @@ const CheckoutScreen=(props)=>{
                             status:false
                         },
                         title:'Order For You',
-                        body:"Customer placed order for your",  
+                        body:"Customer placed order for you",  
                         experienceId: "@rehan.ali/chef-module-V1",
                     })
                 }).then(()=>console.log("Chef's Notification Send"))
