@@ -28,7 +28,9 @@ const SearchBarHeader=props=>{
     const renderCatItem=(itemData)=>{
         
         return(
-            <CategoryTile category={itemData.item} selected={selectedItem} onSelect={()=>{
+            <CategoryTile category={itemData.item}
+            width={80} margin={10}
+             selected={selectedItem} onSelect={()=>{
                 if(itemData.item==='All'){ 
                     setSelectedItem('All');
                     dispatch(getCategoricalData(Meals));   

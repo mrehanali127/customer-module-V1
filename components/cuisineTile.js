@@ -2,13 +2,17 @@ import React from "react";
 import Colors from "../constants/Colors";
 import {Text,StyleSheet, View,Dimensions,TouchableOpacity} from 'react-native';
 
-const CategoryTile=(props)=>{
+
+
+const CuisineTile=(props)=>{
+    //const selectedItems=props.selected;
+    //const isSelected=selectedItems.includes(props.cuisine);
     return(
         <TouchableOpacity style={{...styles.gridItem,...{width:props.width,margin:props.margin}}} onPress={props.onSelect}>
-        <View style={{...styles.container,...{backgroundColor:props.selected===props.category?Colors.primaryLightColor:Colors.whiteColor}}}>
-            <Text style={{...styles.category,...{color:props.selected===props.category?Colors.whiteColor:'#000',
-            fontWeight:props.selected===props.category?'bold':'normal',
-            elevation:props.selected===props.category?10:0}}}>{props.category}</Text>
+        <View style={{...styles.container,...{backgroundColor:props.selected===props.cuisine?Colors.primaryLightColor:Colors.whiteColor}}}>
+            <Text style={{...styles.category,...{color:props.selected===props.cuisine?Colors.whiteColor:'#000',
+            fontWeight:props.selected===props.cuisine?'bold':'normal',
+            elevation:props.selected===props.cuisine?10:0}}}>{props.cuisine}</Text>
         </View>
         </TouchableOpacity>
     )
@@ -43,4 +47,4 @@ const styles=StyleSheet.create({
 
 })
 
-export default CategoryTile;
+export default CuisineTile;
