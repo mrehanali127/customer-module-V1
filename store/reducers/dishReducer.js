@@ -4,7 +4,7 @@ import { GET_DISHES_DATA,GET_DISHES_OF_KITCHEN,
     ADD_CART_ITEM,EMPTY_THE_CART,
     GET_CART_TABLE_DETAILS,
     GET_CATEGORICAL_DATA,APPLY_CATEGORY,
-    SEARCH_INPUT
+    SEARCH_INPUT,GET_SELECTED_CUISINES
  } from "../actions/dishActions";
 
 import IP from "../../constants/IP";
@@ -19,6 +19,7 @@ const initialState={
     cartTableData:[],
     categoricalDishes:[],
     searchInput:'',
+    selectedCuisines:[]
 }
 
 const dishReducer=(state=initialState,action)=>{
@@ -28,6 +29,9 @@ const dishReducer=(state=initialState,action)=>{
 
         case GET_DISHES_DATA:
           return {...state,Dishes:action.dishes};
+        
+        case GET_SELECTED_CUISINES:
+            return {...state,selectedCuisines:action.cuisines};
         
         case GET_CATEGORICAL_DATA:
             return {...state,categoricalDishes:action.dishes};

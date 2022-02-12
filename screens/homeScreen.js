@@ -1,8 +1,6 @@
 import React from "react";
 import { View,Text,StyleSheet, Button, FlatList,TouchableOpacity,Modal} from "react-native";
-import Colors from '../constants/Colors';;
-import { HeaderButtons,Item } from "react-navigation-header-buttons";
-import CustomHeaderButton from "../components/customHeaderButton";
+import Colors from '../constants/Colors';
 import SearchBarHeader from "../components/headerSearchBar";
 import { cuisines } from "../constants/cuisines";
 import FoodItem from "../components/foodItem";
@@ -11,7 +9,7 @@ import { useEffect, useState } from "react";
 import { useSelector,useDispatch } from "react-redux";
 import { Ionicons } from '@expo/vector-icons';
 import CuisineTile from "../components/cuisineTile";
-import { getDishes,getCategoricalData } from "../store/actions/dishActions";
+import { getDishes,getCategoricalData,getSelectedCuisines } from "../store/actions/dishActions";
 import FilterModal from "../components/filterModal";
 
 
@@ -21,14 +19,15 @@ const HomeScreen=(props)=>{
     const [mealsData,setmealsData]=useState([]);
     const [showModal,setShowModal]=useState(false);
     const [categoricalMeals,setCategoricalMeals]=useState([]);
-    const [selectedCuisine,setSelectedCuisine]=useState('');
-    const [selectedCuisines,setSelectedCuisines]=useState([]);
+    const [filteredCuisines,setFilteredCuisines]=useState([]);
+    const [isSelectedCuis,setSelectedCuis]=useState(-1);
     //const mealsData=useSelector(state=>state.dish.Dishes);
 
     //const [dishes,setDishes]=useState([]);
     const dispatch=useDispatch();
     const meals=useSelector(state=>state.dish.Dishes);
     const categories=useSelector(state=>state.dish.categoricalDishes);
+    const selectedCuisines=useSelector(state=>state.dish.selectedCuisines);
     
     const searchingFood=useSelector(state=>state.dish.searchInput);
     
@@ -58,15 +57,12 @@ const HomeScreen=(props)=>{
            <FoodItem title={itemData.item.dish_name} imageUrl={itemData.item.image} kitchenName={itemData.item.kitchen_name}
             price={itemData.item.price}
             onSelect={()=>{
-                
-                props.navigation.navigate({
+                   props.navigation.navigate({
                     routeName:'FoodDetail',
                     params:{
                         mealId:itemData.item.dish_id,
                         kitchenName:itemData.item.kitchen_name,
                         mealData:meals
-
-
                     }
                 });
                }
@@ -76,28 +72,33 @@ const HomeScreen=(props)=>{
 
 
     const renderCuisine=(itemData)=>{
+        let sCuisines=filteredCuisines;
+        //let sCuisines=selectedCuisines;
+        let isSelected=sCuisines.indexOf(itemData.item);
+        //setSelectedCuis(sCuisines.indexOf(itemData.item));
+        //setSelectedCuis(isSelected);
         return(
             <CuisineTile cuisine={itemData.item} 
             width={90} margin={5}
-            selected={selectedCuisines} onSelect={()=>{
-                setSelectedCuisine(itemData.item)
-                setSelectedCuisines({selectedCuisines:[selectedCuisines,itemData.item]})
-                //setSelectedCuisine(itemData.item)
-                //const filteredCategory=meals.filter(dish=>dish.cuisine===itemData.item);
-                //dispatch(getCategoricalData(filteredCategory));    
+            selected={isSelected} onSelect={()=>{
+                if(sCuisines.indexOf(itemData.item)<0){
+                    setFilteredCuisines([...filteredCuisines,itemData.item]);
+                    //setCategoricalMeals(categories.filter(item=>filteredCuisines.includes(item.cuisine)));
+
+                    //dispatch(getSelectedCuisines(filteredCuisines));
+                    console.log(`SELECTED :${filteredCuisines}`);
+                }
+                else{
+                    sCuisines.splice(isSelected, 1);
+                   
+                    setFilteredCuisines(sCuisines);
+                    setCategoricalMeals(categories.filter(item=>filteredCuisines.includes(item.cuisine)));
+                    //dispatch(getSelectedCuisines(filteredCuisines));
+                }
+                //setCategoricalMeals(categories.filter(item=>filteredCuisines.includes(item.cuisine)));
             }}/>
         )
     }
-
-    /*
-    const renderModal=()=>{
-        return(
-            <View>
-            <FilterModal showModal={true}/>
-            </View>
-        )
-    }*/
-
 
         return(
        
@@ -113,16 +114,13 @@ const HomeScreen=(props)=>{
         onSearch={()=>{
             const reg=new RegExp(searchingFood, "i");
             setCategoricalMeals(categories.filter(dish=>reg.test(dish.dish_name)));
-           
-           console.log("////////////////   Seatch  ///////////////////")
-           console.log(categoricalMeals);
+         
         }}
 
         />
         
           </View>
-          <View style={styles.mealsContainer}>
-          
+          <View style={styles.mealsContainer}>    
           <FlatList data={categoricalMeals} renderItem={renderFoodItem} keyExtractor={(item)=>item.dish_id}
           showsVerticalScrollIndicator={false}
           />
@@ -134,12 +132,11 @@ const HomeScreen=(props)=>{
             </View>
             </TouchableOpacity>
             </View>
-          
           </View>
+
 
           <Modal
                 transparent={true}
-                //visible={props.showModal}
                 visible={showModal}
                 >
                 <View style={{backgroundColor:'#000000aa',flex:1}}>
@@ -155,6 +152,8 @@ const HomeScreen=(props)=>{
                  
                 <View style={{...styles.btnContainer,justifyContent:'space-between'}}>
                 <TouchableOpacity onPress={()=>{
+                    setFilteredCuisines([]);
+                    setCategoricalMeals(categories);
                     setShowModal(false);
                     }}>       
                 <View style={{...styles.buttonContainer,backgroundColor:Colors.primaryLightColor}}>
@@ -163,6 +162,13 @@ const HomeScreen=(props)=>{
                 </TouchableOpacity>
                 <TouchableOpacity onPress={()=>{
                   
+                    if(filteredCuisines.length===0){
+                        setCategoricalMeals(categories);
+                    }
+                    else{
+                        setCategoricalMeals(categories.filter(item=>filteredCuisines.includes(item.cuisine)));
+
+                    }
                     setShowModal(false);
                     }}>
                 <View style={{...styles.buttonContainer}}>

@@ -1,1 +1,1 @@
-export const cuisines=['All','Pakistani','Hyderabadi','BBQ','Afghani','Indian','Arabic','Chinese','Turkish'];
+export const cuisines=['Pakistani','Hyderabadi','BBQ','Afghani','Indian','Arabic','Chinese','Turkish'];

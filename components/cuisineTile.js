@@ -9,8 +9,8 @@ const CuisineTile=(props)=>{
     //const isSelected=selectedItems.includes(props.cuisine);
     return(
         <TouchableOpacity style={{...styles.gridItem,...{width:props.width,margin:props.margin}}} onPress={props.onSelect}>
-        <View style={{...styles.container,...{backgroundColor:props.selected===props.cuisine?Colors.primaryLightColor:Colors.whiteColor}}}>
-            <Text style={{...styles.category,...{color:props.selected===props.cuisine?Colors.whiteColor:'#000',
+        <View style={{...styles.container,...{backgroundColor:props.selected>=0?Colors.primaryLightColor:Colors.whiteColor}}}>
+            <Text style={{...styles.category,...{color:props.selected>=0?Colors.whiteColor:'#000',
             fontWeight:props.selected===props.cuisine?'bold':'normal',
             elevation:props.selected===props.cuisine?10:0}}}>{props.cuisine}</Text>
         </View>

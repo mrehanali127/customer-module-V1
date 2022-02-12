@@ -10,6 +10,7 @@ export const REMOVE_CART_ITEM='REMOVE_CART_ITEM';
 export const ADD_CART_ITEM='ADD_CART_ITEM';
 export const EMPTY_THE_CART='EMPTY_THE_CART';
 export const SEARCH_INPUT='SEARCH_INPUT';
+export const GET_SELECTED_CUISINES='GET_SELECTED_CUISINES';
 //export const DECREASE_VALUE='DECREASE_VALUE';
 
 export const searchInput=(item)=>{
@@ -23,6 +24,10 @@ export const getDishes=(items)=>{
 export const getCategoricalData=(items)=>{
     return{type:GET_CATEGORICAL_DATA,dishes:items};
 
+}
+
+export const getSelectedCuisines=(items)=>{
+    return{type:GET_SELECTED_CUISINES,cuisines:items};
 }
 
 export const applyCategory=(items)=>{
