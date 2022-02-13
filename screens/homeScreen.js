@@ -48,8 +48,8 @@ const HomeScreen=(props)=>{
     
     
     
-    console.log("#########################################################")
-    console.log(meals);
+    //console.log("#########################################################")
+    //console.log(meals);
 
 
       const renderFoodItem=(itemData)=>{
@@ -86,7 +86,7 @@ const HomeScreen=(props)=>{
                     //setCategoricalMeals(categories.filter(item=>filteredCuisines.includes(item.cuisine)));
 
                     //dispatch(getSelectedCuisines(filteredCuisines));
-                    console.log(`SELECTED :${filteredCuisines}`);
+                    //console.log(`SELECTED :${filteredCuisines}`);
                 }
                 else{
                     sCuisines.splice(isSelected, 1);
@@ -123,6 +123,7 @@ const HomeScreen=(props)=>{
           <View style={styles.mealsContainer}>    
           <FlatList data={categoricalMeals} renderItem={renderFoodItem} keyExtractor={(item)=>item.dish_id}
           showsVerticalScrollIndicator={false}
+          ListEmptyComponent={<View style={styles.emptyView}><Text style={styles.emptyText}>No Dishes Found</Text></View>}
           />
           <View style={{position: 'absolute', bottom: 5,left:0,right:0, justifyContent: 'center', alignItems: 'center'}}>
           <TouchableOpacity onPress={()=>{setShowModal(true)}}>
@@ -254,7 +255,20 @@ const styles=StyleSheet.create(
         fontSize:16,
         fontWeight:'bold',
         color:Colors.primaryColor
+    },
+    emptyView:{
+        flex:1,
+        //height:'100%',
+        justifyContent:'center',
+        alignItems:'center',
+        marginVertical:'50%',
+    },
+    emptyText:{
+        fontSize:16,
+        fontStyle:'normal',
+        fontWeight:'500'
     }
+
 
 }
 )

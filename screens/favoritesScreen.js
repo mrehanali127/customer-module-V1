@@ -59,7 +59,10 @@ const FavoritesScreen=(props)=>{
             <View style={styles.screen}>
              <View style={styles.mealsContainer}>   
           <FlatList data={favoriteMeals} renderItem={renderFoodItem} keyExtractor={(item)=>item.dish_id}
-          showsVerticalScrollIndicator={false}/>
+          showsVerticalScrollIndicator={false}
+          ListEmptyComponent={<View style={styles.emptyView}><Text style={styles.emptyText}>No Favorites Found!! Add New</Text></View>}
+
+          />
           </View>
         </View>
         )
@@ -80,7 +83,20 @@ const styles=StyleSheet.create(
         mealsContainer:{
            width:'100%',
           flex:1
+        },
+        emptyView:{
+            flex:1,
+            //height:'100%',
+            justifyContent:'center',
+            alignItems:'center',
+            marginVertical:'50%',
+        },
+        emptyText:{
+            fontSize:16,
+            fontStyle:'normal',
+            fontWeight:'500'
         }
+    
        
     }
 )

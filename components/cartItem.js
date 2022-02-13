@@ -23,11 +23,11 @@ const  CartItem=props=>{
             <View style={styles.buttonsContainer}>
             <View>
                 <View style={styles.itemCount}>
-                    <TouchableOpacity onInc={props.incementHandler}>
+                    <TouchableOpacity onPress={props.onDecrement}>
                     <View style={styles.minus}><Text style={styles.incDec}>-</Text></View>
                     </TouchableOpacity>
-                    <View style={styles.counter}><Text style={styles.incDec}>1</Text></View>
-                    <TouchableOpacity onDec={props.decrementHandler} >
+                    <View style={styles.counter}><Text style={styles.incDec}>{props.quantity}</Text></View>
+                    <TouchableOpacity onPress={props.onIncrement} >
                     <View style={styles.plus}><Text style={styles.incDec}>+</Text></View>
                     </TouchableOpacity>
                 </View>

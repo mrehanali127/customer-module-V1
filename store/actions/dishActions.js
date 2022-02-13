@@ -8,9 +8,15 @@ export const GET_CART_TABLE_DETAILS='GET_CART_TABLE_DETAILS';
 export const MANAGE_CART_ITEMS='MANAGE_CART_ITEMS';
 export const REMOVE_CART_ITEM='REMOVE_CART_ITEM';
 export const ADD_CART_ITEM='ADD_CART_ITEM';
+export const ADD_INTO_CART_TABLE='ADD_INTO_CART_TABLE';
+export const REMOVE_FROM_CART_TABLE='REMOVE_FROM_CART_TABLE';
 export const EMPTY_THE_CART='EMPTY_THE_CART';
+export const EMPTY_THE_CART_TABLE='EMPTY_THE_CART_TABLE';
 export const SEARCH_INPUT='SEARCH_INPUT';
 export const GET_SELECTED_CUISINES='GET_SELECTED_CUISINES';
+export const INCREASE_QUNATITY='INCREASE_QUNATITY';
+export const DECREASE_QUNATITY='DECREASE_QUNATITY';
+
 //export const DECREASE_VALUE='DECREASE_VALUE';
 
 export const searchInput=(item)=>{
@@ -58,13 +64,34 @@ export const addCartItem=(item)=>{
     return{type:ADD_CART_ITEM,newItemId:item};
 }
 
+export const addItemToCartTable=(item)=>{
+    return{type:ADD_INTO_CART_TABLE,newItemData:item};
+}
+
+export const removeFromCartTable=(itemId)=>{
+    return{type:REMOVE_FROM_CART_TABLE,removedItemId:itemId};
+}
+
 export const emptyTheCart=()=>{
-    return{type:EMPTY_THE_CART}
+    return{type:EMPTY_THE_CART};
+}
+
+export const emptyTheCartTable=()=>{
+    return{type:EMPTY_THE_CART_TABLE};
 }
 
 export const getCartData=(items)=>{
     return{type:GET_CART_TABLE_DETAILS,cartData:items}
 }
+
+export const increaseQuantity=(item)=>{
+    return{type:INCREASE_QUNATITY,cartItemId:item};
+}
+
+export const decreaseQuantity=(item)=>{
+    return{type:DECREASE_QUNATITY,cartItemId:item};
+}
+
 
 
 /*

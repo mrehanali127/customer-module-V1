@@ -7,7 +7,7 @@ import IP from "../constants/IP";
 import { HeaderButtons,Item } from "react-navigation-header-buttons";
 import { useEffect, useState } from "react";
 import { useSelector,useDispatch } from "react-redux";
-import { emptyTheCart,getCartData } from "../store/actions/dishActions";
+import { emptyTheCart,getCartData,emptyTheCartTable } from "../store/actions/dishActions";
 import * as Notifications from 'expo-notifications';
 
 
@@ -104,13 +104,13 @@ const CheckoutScreen=(props)=>{
 
 
             const addOrderDetails=(dish)=>{
-                const amountOfThisItem=cartTableRecord.filter(food=>food.dish_id===dish)
+                const orderItem=cartTableRecord.filter(food=>food.dish_id===dish)
                 let url=`http://${IP.ip}:3000/orderDetail`;
                 let data1={
                     orderId:newOrderId,
                     dishId:dish,
-                    quantity:1,
-                    totalAmount:amountOfThisItem[0].total_amount
+                    quantity:orderItem[0].quantity,
+                    totalAmount:orderItem[0].total_amount
                     //totalAmount:subTotal
                 }
                 console.log(data1);
@@ -153,6 +153,7 @@ const CheckoutScreen=(props)=>{
                 }).then((response)=>response.json())
                 .then((response)=>console.log(response))
                 .then(()=>dispatch(emptyTheCart()))
+                .then(()=>dispatch(emptyTheCartTable()))
                 .then(()=>console.log("Item Deleted"))
                 .catch((error)=>console.log(error));
         }

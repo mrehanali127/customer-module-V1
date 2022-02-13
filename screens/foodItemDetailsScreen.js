@@ -8,7 +8,7 @@ import CustomHeaderButton from '../components/customHeaderButton';
 import KitchenCard from "../components/kitchenCard1";
 import CustomButton from "../components/customButton";
 import { useSelector,useDispatch } from "react-redux";
-import { toggleFavorite,addCartItem } from "../store/actions/dishActions";
+import { toggleFavorite,addCartItem,addItemToCartTable } from "../store/actions/dishActions";
 import IP from "../constants/IP";
 
 const FoodItemDetailsScreen=(props)=>{
@@ -30,7 +30,9 @@ const FoodItemDetailsScreen=(props)=>{
 
       const mealId=props.navigation.getParam('mealId');
       //const mealsData=props.navigation.getParam('mealData');
-      const mealsData=useSelector(state=>state.dish.Dishes)
+      const mealsData=useSelector(state=>state.dish.Dishes);
+      const itemsPlacedInCart=useSelector(state=>state.dish.cartItems);
+
       
       const selectedMeal=mealsData.filter(food=>food.dish_id===mealId);
       const isDishFavorite=useSelector(state=>state.dish.favoritesIds.some(dish=>dish.dish_id===mealId))
@@ -71,13 +73,22 @@ const FoodItemDetailsScreen=(props)=>{
       }
 
       const addItemToCart=()=>{
+
+        const openedItem=itemsPlacedInCart.find(item=>item.dish_id===selectedMeal[0].dish_id);
+        const index=itemsPlacedInCart.indexOf(openedItem);
+        if(index>=0){
+            ToastAndroid.show(`${selectedMeal[0].dish_name} Already In Cart`, ToastAndroid.SHORT)
+        return;
+        }
+
+
         let url=`http://${IP.ip}:3000/cart`;
+        let insertedId;
         let data={
             customerId:'03082562292',
             dishId:selectedMeal[0].dish_id,
             quantity:1,
             totalAmount:selectedMeal[0].price*1
-
         }
         fetch(url,{
             method:'POST',
@@ -87,6 +98,17 @@ const FoodItemDetailsScreen=(props)=>{
               },
             body:JSON.stringify(data)
         }).then((response)=>response.json())
+        .then((response)=>{
+            insertedId=response.insertId;
+            const cartItem={
+                cart_item_id:insertedId,
+                cust_id:'03082562292',
+                dish_id:selectedMeal[0].dish_id,
+                quantity:1,
+                total_amount:selectedMeal[0].price
+            }
+            dispatch(addItemToCartTable(cartItem));
+            })
         .then(()=>ToastAndroid.show(`${selectedMeal[0].dish_name} Added to Cart`, ToastAndroid.SHORT))
         .then(()=>dispatch(addCartItem(selectedMeal[0].dish_id)))
         .catch((error)=>console.log(error));
@@ -126,6 +148,7 @@ const FoodItemDetailsScreen=(props)=>{
             </TouchableOpacity>
             </View>
             <Text style={styles.price}>Rs.{selectedMeal[0].price}</Text>
+            <Text style={styles.category}>Cuisine: {selectedMeal[0].cuisine}</Text>
             <Text style={styles.category}>Category: {selectedMeal[0].cat_name}</Text>
         </View>
         <View style={styles.descButton}>

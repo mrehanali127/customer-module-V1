@@ -1,10 +1,12 @@
 import { GET_DISHES_DATA,GET_DISHES_OF_KITCHEN,
     MANAGE_CART_ITEMS,MANAGE_FAVORITES,
     TOGGLE_FAVORITE,REMOVE_CART_ITEM,
-    ADD_CART_ITEM,EMPTY_THE_CART,
+    ADD_CART_ITEM,EMPTY_THE_CART,EMPTY_THE_CART_TABLE,
     GET_CART_TABLE_DETAILS,
     GET_CATEGORICAL_DATA,APPLY_CATEGORY,
-    SEARCH_INPUT,GET_SELECTED_CUISINES
+    SEARCH_INPUT,GET_SELECTED_CUISINES,
+    ADD_INTO_CART_TABLE,REMOVE_FROM_CART_TABLE,
+    INCREASE_QUNATITY,DECREASE_QUNATITY
  } from "../actions/dishActions";
 
 import IP from "../../constants/IP";
@@ -62,6 +64,15 @@ const dishReducer=(state=initialState,action)=>{
         case ADD_CART_ITEM:
             const dish=state.Dishes.find(item=>item.dish_id===action.newItemId);
             return {...state,cartItems:state.cartItems.concat(dish)};
+        case ADD_INTO_CART_TABLE:
+            return {...state,cartTableData:state.cartTableData.concat(action.newItemData)};
+        
+        case REMOVE_FROM_CART_TABLE:
+            const indexCartTable=state.cartTableData.findIndex(item=>item.dish_id===action.removedItemId);
+            const updateCartTable=[...state.cartTableData];
+            updateCartTable.splice(indexCartTable,1);
+            return{...state,cartTableData:updateCartTable};
+        
         case REMOVE_CART_ITEM:
             const indexItem=state.cartItems.findIndex(dish=>dish.dish_id===action.cartItemId);
             const updateCart=[...state.cartItems];
@@ -69,6 +80,43 @@ const dishReducer=(state=initialState,action)=>{
             return{...state,cartItems:updateCart};
         case EMPTY_THE_CART:
             return{...state,cartItems:[]};
+        
+        case EMPTY_THE_CART_TABLE:
+            return{...state,cartTableData:[]};
+
+        case INCREASE_QUNATITY:
+            const ifSelected=state.cartTableData.findIndex(dish=>dish.dish_id===action.cartItemId);
+                if(ifSelected>=0){
+                    let selectedDish=state.cartTableData[ifSelected];
+                    selectedDish.quantity=selectedDish.quantity+1;
+                    const itemSelectedFromCart=state.cartItems.find(dish=>dish.dish_id===action.cartItemId);
+                    selectedDish.total_amount=itemSelectedFromCart.price*selectedDish.quantity;
+                    console.log('/\\\\\\\\\\\\ Incrmented Dish \\\\\\\\/');
+                    console.log(selectedDish);
+                    const cartData=[...state.cartTableData];
+                    cartData.splice(ifSelected, 1,selectedDish);
+                    console.log('/\\\\\\\\\\\\ incremented Cart Data \\\\\\\\/');
+                    console.log(cartData);
+                    return {...state,cartTableData:cartData};
+                };
+        case DECREASE_QUNATITY:
+                const ifSelectedDec=state.cartTableData.findIndex(dish=>dish.dish_id===action.cartItemId);
+                    if(ifSelectedDec>=0){
+                            let selectedDishDec=state.cartTableData[ifSelectedDec];
+                            if(selectedDishDec.quantity<=1){
+                                return state;
+                            }
+                            selectedDishDec.quantity=selectedDishDec.quantity-1;
+                            const itemSelectedFromCartDec=state.cartItems.find(dish=>dish.dish_id===action.cartItemId);
+                            selectedDishDec.total_amount=itemSelectedFromCartDec.price*selectedDishDec.quantity;
+                            console.log('/\\\\\\\\\\\\ decremented Dish \\\\\\\\/');
+                            console.log(selectedDishDec);
+                            const cartDataDec=[...state.cartTableData];
+                            cartDataDec.splice(ifSelectedDec, 1,selectedDishDec);
+                            console.log('/\\\\\\\\\\\\ decremented Cart Data \\\\\\\\/');
+                            console.log(cartDataDec);
+                            return {...state,cartTableData:cartDataDec};
+                    }
 
         default:
             return state;    
