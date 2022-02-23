@@ -21,6 +21,8 @@ const CheckoutScreen=(props)=>{
     const [addressDetails,setAddressDetails]=useState([]);
     const [cartTable,setCartTable]=useState([]);
     const [isLoading,setLoading]=useState(true);
+    const [senderToken,setSenderToken]=useState('');
+    const [isRefreshing,setRefreshing]=useState(true);
     let notificationData;
     const dispatch=useDispatch();
     const cartTableRecord=useSelector(state=>state.dish.cartTableData);
@@ -28,7 +30,7 @@ const CheckoutScreen=(props)=>{
     console.log(cartTableRecord)
     
     let newOrderId=0;
-    let senderToken=' ';
+    //let senderToken=' ';
     let responseAfterPlacement;
    
 
@@ -37,17 +39,18 @@ const CheckoutScreen=(props)=>{
         Notifications.getExpoPushTokenAsync()
         .then(response=>{
           console.log(response);
-          senderToken=response.data;
-          console.log(senderToken);
+          //senderToken=response.data;
+          setSenderToken(response.data);
+          console.log(`Sender Token is : ${senderToken}`);
         })
-        .catch((err)=>{
-          return null;
-        })
-        fetch(`http://${IP.ip}:3000/customer/${customerId}`)
-       .then((response)=>response.json())
-       .then((response)=>setAddressDetails(response[0]))
+       .then(async ()=>{
+        await fetch(`http://${IP.ip}:3000/customer/${customerId}`)
+        .then((response)=>response.json())
+        .then((response)=>setAddressDetails(response[0]))
+       })     
+       .then(()=>setRefreshing(false))
        .catch((error)=>console.error(error));
-      },[]);
+      },[isRefreshing]);
 
       
     useEffect(()=>{

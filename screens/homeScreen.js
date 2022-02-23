@@ -1,5 +1,5 @@
 import React from "react";
-import { View,Text,StyleSheet, Button, FlatList,TouchableOpacity,Modal} from "react-native";
+import { View,Text,StyleSheet, Button, FlatList,TouchableOpacity,Modal,RefreshControl} from "react-native";
 import Colors from '../constants/Colors';
 import SearchBarHeader from "../components/headerSearchBar";
 import { cuisines } from "../constants/cuisines";
@@ -54,7 +54,7 @@ const HomeScreen=(props)=>{
 
       const renderFoodItem=(itemData)=>{
         return(
-           <FoodItem title={itemData.item.dish_name} imageUrl={itemData.item.image} kitchenName={itemData.item.kitchen_name}
+           <FoodItem title={itemData.item.dish_name} imageUrl={`http://${IP.ip}:3000/images/${itemData.item.image}`} kitchenName={itemData.item.kitchen_name}
             price={itemData.item.price}
             onSelect={()=>{
                    props.navigation.navigate({
@@ -123,6 +123,7 @@ const HomeScreen=(props)=>{
           <View style={styles.mealsContainer}>    
           <FlatList data={categoricalMeals} renderItem={renderFoodItem} keyExtractor={(item)=>item.dish_id}
           showsVerticalScrollIndicator={false}
+          refreshControl={<RefreshControl refreshing={isLoading} onRefresh={()=>{setLoading(true)}}/>}
           ListEmptyComponent={<View style={styles.emptyView}><Text style={styles.emptyText}>No Dishes Found</Text></View>}
           />
           <View style={{position: 'absolute', bottom: 5,left:0,right:0, justifyContent: 'center', alignItems: 'center'}}>

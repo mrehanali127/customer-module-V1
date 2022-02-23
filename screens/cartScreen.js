@@ -147,7 +147,7 @@ const CartScreen=(props)=>{
 
         return(
             <CartItem restaurantName={itemData.item.kitchen_name} dishName={itemData.item.dish_name} 
-            price={itemData.item.price} image={itemData.item.image}
+            price={itemData.item.price} image={`http://${IP.ip}:3000/images/${itemData.item.image}`}
             quantity={getQuantity(itemData.item.dish_id)}
             onIncrement={()=>incrementHandler(itemData.item.dish_id)}
             onDecrement={()=>decrementHandler(itemData.item.dish_id)}

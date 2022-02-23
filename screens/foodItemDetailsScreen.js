@@ -132,7 +132,7 @@ const FoodItemDetailsScreen=(props)=>{
         <View>
         <View style={styles.foodItem}>
          <View style={{...styles.foodRow,...styles.foodHeader}}>
-                <ImageBackground source={{uri:selectedMeal[0].image}} style={styles.backgroundImage}>
+                <ImageBackground source={{uri:`http://${IP.ip}:3000/images/${selectedMeal[0].image}`}} style={styles.backgroundImage}>
             <View style={styles.titleContainer}>
             <Text style={styles.Item} numberOfLines={1}>
               {selectedMeal[0].dish_name}

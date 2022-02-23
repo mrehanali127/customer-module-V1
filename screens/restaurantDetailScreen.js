@@ -36,10 +36,10 @@ const RestaurantDetailScreen=(props)=>{
 
         const renderFoodItem=(itemData)=>{
             return(
-               <FoodItem title={itemData.item.dish_name} imageUrl={itemData.item.image} kitchenName={itemData.item.kitchen_name}
+               <FoodItem title={itemData.item.dish_name} imageUrl={`http://${IP.ip}:3000/images/${itemData.item.image}`} kitchenName={itemData.item.kitchen_name}
                 price={itemData.item.price}
                 onSelect={()=>{   
-                    props.navigation.navigate({
+                    props.navigation.navigate({ 
                         routeName:'FoodDetail',
                         params:{
                             mealId:itemData.item.dish_id,
