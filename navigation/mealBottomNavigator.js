@@ -1,6 +1,7 @@
 import { createAppContainer } from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { createSwitchNavigator } from 'react-navigation';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -17,6 +18,9 @@ import RestaurantsScreen from '../screens/restaurantsScreen';
 import RestaurantDetailScreen from '../screens/restaurantDetailScreen';
 import FoodItemDetailsScreen from '../screens/foodItemDetailsScreen';
 import CheckoutScreen from '../screens/checkoutScreen';
+import LoginScreen from '../screens/loginScreen';
+import SignupScreen from '../screens/signupScreen';
+import OTPScreen from '../screens/otpTakingScreen';
 import NotificationScreen from '../screens/notificationScreen';
 
 
@@ -134,5 +138,17 @@ const MealsBottomNavigator=Platform.OS === 'android'
        } 
    });
 
+const AuthNavigator=createStackNavigator(
+    {  
+        Login:LoginScreen,
+        Signup:SignupScreen,
+        OTP:OTPScreen,
+    },defaultNavConfiguration
+)
 
-export default createAppContainer(MealsBottomNavigator);
+const MainNavigator=createSwitchNavigator({
+    Auth:AuthNavigator,
+    MainHome:MealsBottomNavigator
+})
+
+export default createAppContainer(MainNavigator);

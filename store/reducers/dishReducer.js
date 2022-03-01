@@ -6,7 +6,8 @@ import { GET_DISHES_DATA,GET_DISHES_OF_KITCHEN,
     GET_CATEGORICAL_DATA,APPLY_CATEGORY,
     SEARCH_INPUT,GET_SELECTED_CUISINES,
     ADD_INTO_CART_TABLE,REMOVE_FROM_CART_TABLE,
-    INCREASE_QUNATITY,DECREASE_QUNATITY
+    INCREASE_QUNATITY,DECREASE_QUNATITY,
+    GET_CUSTOMER_DETAIL
  } from "../actions/dishActions";
 
 import IP from "../../constants/IP";
@@ -17,6 +18,7 @@ const initialState={
     Dishes: [],
     favoritesIds:[],
     cartItems:[],
+    customerDetails:{},
     cartTableData:[],
     categoricalDishes:[],
     searchInput:'',
@@ -31,6 +33,10 @@ const dishReducer=(state=initialState,action)=>{
         case GET_DISHES_DATA:
           return {...state,Dishes:action.dishes};
         
+          case GET_CUSTOMER_DETAIL:
+            return {...state,customerDetails:action.customer};
+          
+
         case GET_SELECTED_CUISINES:
             return {...state,selectedCuisines:action.cuisines};
         

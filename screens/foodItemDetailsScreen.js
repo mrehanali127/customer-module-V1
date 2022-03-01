@@ -16,6 +16,7 @@ const FoodItemDetailsScreen=(props)=>{
       const[isLoading,setLoading]=useState(true);
       const[kitchens,setKitchens]=useState([]);
       const dispatch=useDispatch();
+      const customerDetail=useSelector(state=>state.dish.customerDetails);
 
       useEffect(()=>{
         const kitchenName=props.navigation.getParam('kitchenName');
@@ -40,7 +41,7 @@ const FoodItemDetailsScreen=(props)=>{
       const addNewFavorite=()=>{
         let url=`http://${IP.ip}:3000/dish/favorites`;
         let data={
-            customerId:'03082562292',
+            customerId:customerDetail.phone,
             dishId:selectedMeal[0].dish_id,
         }
         fetch(url,{
@@ -85,7 +86,7 @@ const FoodItemDetailsScreen=(props)=>{
         let url=`http://${IP.ip}:3000/cart`;
         let insertedId;
         let data={
-            customerId:'03082562292',
+            customerId:customerDetail.phone,
             dishId:selectedMeal[0].dish_id,
             quantity:1,
             totalAmount:selectedMeal[0].price*1
@@ -102,7 +103,7 @@ const FoodItemDetailsScreen=(props)=>{
             insertedId=response.insertId;
             const cartItem={
                 cart_item_id:insertedId,
-                cust_id:'03082562292',
+                cust_id:customerDetail.phone,
                 dish_id:selectedMeal[0].dish_id,
                 quantity:1,
                 total_amount:selectedMeal[0].price

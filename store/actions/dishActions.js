@@ -1,4 +1,5 @@
 export const GET_DISHES_DATA='GET_DISHES_DATA';
+export const GET_CUSTOMER_DETAIL='GET_CUSTOMER_DETAIL';
 export const GET_CATEGORICAL_DATA='GET_CATEGORICAL_DATA';
 export const APPLY_CATEGORY='APPLY_CATEGORY';
 export const GET_DISHES_OF_KITCHEN='GET_DISHES_OF_KITCHEN';
@@ -25,6 +26,10 @@ export const searchInput=(item)=>{
 
 export const getDishes=(items)=>{
     return{type:GET_DISHES_DATA,dishes:items};
+}
+
+export const getCustomerDetail=(item)=>{
+    return{type:GET_CUSTOMER_DETAIL,customer:item};
 }
 
 export const getCategoricalData=(items)=>{

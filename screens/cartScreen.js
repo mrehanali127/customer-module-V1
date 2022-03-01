@@ -22,10 +22,11 @@ const CartScreen=(props)=>{
     let listOfTokens=[];
     let listOfDishIds=[];
     const cartTableRecord=useSelector(state=>state.dish.cartTableData);
+    const customerDetail=useSelector(state=>state.dish.customerDetails);
     const itemsInCart=useSelector(state=>state.dish.cartItems);
 
     useEffect(()=>{
-      const customerId='03082562292';
+      const customerId=customerDetail.phone;
       fetch(`http://${IP.ip}:3000/cart/${customerId}`)
       .then((response)=>response.json())
       .then((response)=>setCartTable(response))
@@ -38,7 +39,7 @@ const CartScreen=(props)=>{
 
     useEffect(()=>{
       // const customerId=props.navigation.getParam('customerId');
-      const customerId='03082562292';
+      const customerId=customerDetail.phone;
       fetch(`http://${IP.ip}:3000/cart/dishes/${customerId}`)
        .then((response)=>response.json())
        .then((response)=>setCartItems(response))
@@ -69,7 +70,8 @@ const CartScreen=(props)=>{
      }*/
 
     const incrementHandler=(dishId)=>{
-      const customerId='03082562292';
+      //const customerId='03082562292';
+      const customerId=customerDetail.phone;
       
       dispatch(increaseQuantity(dishId));
       const selectedDish=cartTableRecord.find(dish=>dish.dish_id===dishId);
@@ -92,7 +94,8 @@ const CartScreen=(props)=>{
     }
 
     const decrementHandler=(dishId)=>{
-      const customerId='03082562292';
+      //const customerId='03082562292';
+      const customerId=customerDetail.phone;
       dispatch(decreaseQuantity(dishId));
       const selectedDish=cartTableRecord.find(dish=>dish.dish_id===dishId);
       let url=`http://${IP.ip}:3000/cart/updateQuantity/${customerId}/${dishId}`;

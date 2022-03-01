@@ -26,6 +26,7 @@ const CheckoutScreen=(props)=>{
     let notificationData;
     const dispatch=useDispatch();
     const cartTableRecord=useSelector(state=>state.dish.cartTableData);
+    const customerDetail=useSelector(state=>state.dish.customerDetails);
     console.log("///////////////// CART ITEMS  ////////////////")
     console.log(cartTableRecord)
     
@@ -35,7 +36,8 @@ const CheckoutScreen=(props)=>{
    
 
     useEffect(()=>{
-        const customerId='03082562292';
+        //const customerId='03082562292';
+        const customerId=customerDetail.phone;
         Notifications.getExpoPushTokenAsync()
         .then(response=>{
           console.log(response);
@@ -54,7 +56,8 @@ const CheckoutScreen=(props)=>{
 
       
     useEffect(()=>{
-        const customerId='03082562292';
+        //const customerId='03082562292';
+        const customerId=customerDetail.phone;
         fetch(`http://${IP.ip}:3000/cart/${customerId}`)
       .then((response)=>response.json())
       .then((response)=>setCartTable(response))
@@ -66,7 +69,7 @@ const CheckoutScreen=(props)=>{
     const placeOrder=()=>{
         let url=`http://${IP.ip}:3000/order`;
         let data={
-            customerId:'03082562292',
+            customerId:customerDetail.phone,
             chefId:'03154562292',
             totalAmount:grandTotal,
             status:'pending'
@@ -92,7 +95,7 @@ const CheckoutScreen=(props)=>{
             sendNotificationsToChefs();
         })
         .then(()=>{
-            deleteCartItems('03082562292');
+            deleteCartItems(customerDetail.phone);
         })
         .then(()=>{
             showAlert(newOrderId,data.totalAmount,addressDetails.firstname,addressDetails.phone,addressDetails.address);

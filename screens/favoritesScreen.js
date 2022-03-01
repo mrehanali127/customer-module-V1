@@ -14,12 +14,12 @@ const FavoritesScreen=(props)=>{
     const [favIds,setFavIds]=useState([]);
    
     const meals=useSelector(state=>state.dish.Dishes);
-    
+    const customerDetail=useSelector(state=>state.dish.customerDetails);
     const dispatch=useDispatch();
    
     useEffect(()=>{
-       
-        fetch(`http://${IP.ip}:3000/customer/favorites/03082562292`)
+        const customerId=customerDetail.phone;
+        fetch(`http://${IP.ip}:3000/customer/favorites/${customerId}`)
         .then((response)=>response.json())
         .then((response)=>setFavIds(response))
         .then(()=>dispatch(manageFavorites(favIds)))
