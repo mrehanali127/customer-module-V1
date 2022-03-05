@@ -20,6 +20,7 @@ import FoodItemDetailsScreen from '../screens/foodItemDetailsScreen';
 import CheckoutScreen from '../screens/checkoutScreen';
 import LoginScreen from '../screens/loginScreen';
 import SignupScreen from '../screens/signupScreen';
+import PasswordScreen from '../screens/passwordScreen';
 import OTPScreen from '../screens/otpTakingScreen';
 import NotificationScreen from '../screens/notificationScreen';
 
@@ -143,6 +144,7 @@ const AuthNavigator=createStackNavigator(
         Login:LoginScreen,
         Signup:SignupScreen,
         OTP:OTPScreen,
+        Password:PasswordScreen
     },defaultNavConfiguration
 )
 

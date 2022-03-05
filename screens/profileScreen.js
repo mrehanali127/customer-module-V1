@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
   },
   buttons: {
     backgroundColor: "#ff620a",
-    width: "60%",
+    width: "80%",
     height: 40,
     alignItems: "center",
     justifyContent: "center",

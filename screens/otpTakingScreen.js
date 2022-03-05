@@ -11,8 +11,7 @@ const OTPScreen=(props)=>{
 
     const [isOTPFocused,setOTPFocused]=useState(false);
     const [otp,setOtp]=useState('');
-    //const [authData,setAuthData]=useState({});
-    //const [verResponse,setVerResponse]=useState({});
+   
     let verResponse={};
     let dataOfCustomer;
     const authenticationData=props.navigation.getParam('otpData');
@@ -47,7 +46,6 @@ const OTPScreen=(props)=>{
                 body:JSON.stringify(data)
             }).then((response)=>response.json())
             .then((response)=>{verResponse=response})
-            //.then((response)=>setVerResponse(response))
             .then(()=>console.log(verResponse))
             .then(()=>ToastAndroid.show(verResponse.msg, ToastAndroid.SHORT))
             .then(()=>{
@@ -55,23 +53,16 @@ const OTPScreen=(props)=>{
                     getData().then(()=>{
                     if(dataOfCustomer.length===0){
                         console.log("entered .....")
-                        let url=`http://${IP.ip}:3000/customer/register`;
-                        let data= customerData
-                        fetch(url,{
-                            method:'POST',
-                            headers: {
-                                Accept: 'application/json',
-                                'Content-Type': 'application/json'
-                            },
-                            body:JSON.stringify(data)
-                        }).then((response)=>response.json())
-                        .then((response)=>console.log(response))
-                        .then(()=>console.log("Working...."))
+                        props.navigation.navigate({
+                            routeName:'Password',
+                            params:{
+                                
+                                customer:customerData,
+                          }
+                        })
                     }
                     })
-                    dispatch(getCustomerDetail(customerData))
-                    console.log(customerData)
-                    props.navigation.navigate('MainHome')
+                   
                 }
                 else if(verResponse.verification===false){
                     props.navigation.goBack();
