@@ -219,7 +219,7 @@ const styles=StyleSheet.create({
     btnTitle:{
         color:Colors.whiteColor,
         fontSize:16,
-        paddingEnd:10
+       
     },
 
 })

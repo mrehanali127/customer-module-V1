@@ -23,16 +23,42 @@ const CheckoutScreen=(props)=>{
     const [isLoading,setLoading]=useState(true);
     const [senderToken,setSenderToken]=useState('');
     const [isRefreshing,setRefreshing]=useState(true);
+    const [chefLoading,setChefLoading]=useState(true);
+    const [chefId,setChefId]=useState('');
     let notificationData;
     const dispatch=useDispatch();
     const cartTableRecord=useSelector(state=>state.dish.cartTableData);
+    const dishesData=useSelector(state=>state.dish.Dishes);
     const customerDetail=useSelector(state=>state.dish.customerDetails);
     console.log("///////////////// CART ITEMS  ////////////////")
     console.log(cartTableRecord)
+
+    // Working On IT
+    // PEnding
+    // Not Working Fine
+    // Till Now just working on getting Food from single Kitchen
+    let kitchens=[];
+    let kitchenName;
     
     let newOrderId=0;
     //let senderToken=' ';
     let responseAfterPlacement;
+
+
+    useEffect(()=>{
+        for(let i=0;i<cartTableRecord.length;i++){
+            let kitchen=dishesData.filter(dish=>dish.dish_id===cartTableRecord[0].dish_id)
+            kitchens.push(kitchen[0])
+        }
+        console.log(kitchens)
+        console.log(kitchens[0].kitchen_name);
+        kitchenName=kitchens[0].kitchen_name;
+        fetch(`http://${IP.ip}:3000/chef/getChefId/${kitchenName}`)
+        .then((response)=>response.json())
+        .then((response)=>setChefId(response[0].chef_id))
+       .catch((error)=>console.error(error))
+       .finally(()=>setChefLoading(false))
+    },[chefLoading])
    
 
     useEffect(()=>{
@@ -70,7 +96,9 @@ const CheckoutScreen=(props)=>{
         let url=`http://${IP.ip}:3000/order`;
         let data={
             customerId:customerDetail.phone,
-            chefId:'03154562292',
+
+            //chefId:'03154562292',
+            chefId:chefId,
             totalAmount:grandTotal,
             status:'pending'
         }
