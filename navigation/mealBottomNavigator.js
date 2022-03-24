@@ -17,6 +17,8 @@ import ProfileScreen from '../screens/profileScreen';
 import RestaurantsScreen from '../screens/restaurantsScreen';
 import RestaurantDetailScreen from '../screens/restaurantDetailScreen';
 import FoodItemDetailsScreen from '../screens/foodItemDetailsScreen';
+import WeeklyPlansListScreen from '../screens/weeklyPlansListScreen';
+import WeeklyPlanDetailsScreen from '../screens/weeklyPlanDetailsScreen';
 import CheckoutScreen from '../screens/checkoutScreen';
 import LoginScreen from '../screens/loginScreen';
 import SignupScreen from '../screens/signupScreen';
@@ -41,7 +43,9 @@ const HomeNavigator=createStackNavigator(
         Home: HomeScreen,
         FoodDetail:FoodItemDetailsScreen,
         RestaurantDetail:RestaurantDetailScreen,
-        Notifications:NotificationScreen  
+        Notifications:NotificationScreen,
+        WeeklyPlansList:WeeklyPlansListScreen,
+        WeeklyPlanDetails:WeeklyPlanDetailsScreen  
     },defaultNavConfiguration
 );
 

@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import CuisineTile from "../components/cuisineTile";
 import { getDishes,getCategoricalData,getSelectedCuisines } from "../store/actions/dishActions";
 import FilterModal from "../components/filterModal";
+import WeeklyPlanCardHome from "../components/weeklyPlanCardHome";
 
 
 const HomeScreen=(props)=>{
@@ -120,6 +121,9 @@ const HomeScreen=(props)=>{
         />
         
           </View>
+          <WeeklyPlanCardHome onSelect={()=>{
+              props.navigation.navigate('WeeklyPlansList');
+          }}/>
           <View style={styles.mealsContainer}>    
           <FlatList data={categoricalMeals} renderItem={renderFoodItem} keyExtractor={(item)=>item.dish_id}
           showsVerticalScrollIndicator={false}

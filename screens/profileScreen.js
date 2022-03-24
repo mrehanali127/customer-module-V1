@@ -9,10 +9,11 @@ import {
   KeyboardAvoidingView,
   ScrollView,
  ToastAndroid,
-  Picker,
+  
  
 } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
+import { Picker } from "@react-native-picker/picker"
 import { useSelector,useDispatch } from "react-redux"
 import { getCustomerDetail } from "../store/actions/dishActions"
 import Colors from "../constants/Colors"
@@ -224,7 +225,7 @@ const styles = StyleSheet.create({
   },
   picker: {
     marginTop: 10,
-    height: 35,
+    height: 55,
     width: "95%",
     justifyContent: "space-between",
     margin: 10,
