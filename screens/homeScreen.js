@@ -128,7 +128,7 @@ const HomeScreen=(props)=>{
           <FlatList data={categoricalMeals} renderItem={renderFoodItem} keyExtractor={(item)=>item.dish_id}
           showsVerticalScrollIndicator={false}
           refreshControl={<RefreshControl refreshing={isLoading} onRefresh={()=>{setLoading(true)}}/>}
-          ListEmptyComponent={<View style={styles.emptyView}><Text style={styles.emptyText}>No Dishes Found</Text></View>}
+          //ListEmptyComponent={<View style={styles.emptyView}><Text style={styles.emptyText}>No Dishes Found</Text></View>}
           />
           <View style={{position: 'absolute', bottom: 5,left:0,right:0, justifyContent: 'center', alignItems: 'center'}}>
           <TouchableOpacity onPress={()=>{setShowModal(true)}}>
