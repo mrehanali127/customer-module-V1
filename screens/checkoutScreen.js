@@ -50,6 +50,7 @@ const CheckoutScreen=(props)=>{
             let kitchen=dishesData.filter(dish=>dish.dish_id===cartTableRecord[0].dish_id)
             kitchens.push(kitchen[0])
         }
+        console.log("/////////  Kitchens DATA /////////")
         console.log(kitchens)
         console.log(kitchens[0].kitchen_name);
         kitchenName=kitchens[0].kitchen_name;

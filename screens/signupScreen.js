@@ -1,5 +1,7 @@
 import React,{useState,useEffect} from "react";
-import {View,ScrollView,Text,StyleSheet, Button, KeyboardAvoidingView,TextInput,TouchableOpacity,ToastAndroid,Picker} from 'react-native';
+import {View,ScrollView,Text,StyleSheet, Button, KeyboardAvoidingView,TextInput,TouchableOpacity,ToastAndroid} from 'react-native';
+
+import { Picker } from "@react-native-picker/picker";
 
 import Colors from "../constants/Colors";
 import IP from "../constants/IP";

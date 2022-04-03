@@ -169,7 +169,8 @@ const ProfileScreen = (props) => {
 const styles = StyleSheet.create({
   screencontainer: {
    
-    alignItems:'center',
+    //alignItems:'center',
+    paddingHorizontal:30,
     width:'100%',
   },
   title: {
@@ -187,7 +188,6 @@ const styles = StyleSheet.create({
   },
   cardView:{
 
-    width:'100%',
     paddingHorizontal:15,
     paddingVertical:10,
     backgroundColor:Colors.whiteColor,
