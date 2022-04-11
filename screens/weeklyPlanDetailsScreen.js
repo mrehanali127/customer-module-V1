@@ -15,27 +15,78 @@ import {
   Modal,
   Alert,
 } from "react-native"
-import { useState } from "react"
+import { useState,useEffect } from "react"
 import WeeklyPlanCard from "../components/weeklyPlanCard"
 import DayWiseFoodCard from "../components/DayWiseFoodCard"
 import { DAYSDATA } from "../constants/daysData"
+import IP from "../constants/IP"
+import { useSelector,useDispatch } from "react-redux";
 
 
 const WeeklyPlanDetailsScreen = (props) => {
-    const imageUrl = props.navigation.getParam("imgurl")
-    const planName = props.navigation.getParam("planname")
+    const imageURL = props.navigation.getParam("imgurl")
+    const planName = props.navigation.getParam("planName")
     const KitchenName = props.navigation.getParam("KitchenName")
     const price = props.navigation.getParam("price")
+    const planId=props.navigation.getParam("planId")
+    const allDishes=useSelector(state=>state.dish.Dishes);
+
     const [currentmodalVisible, setModalVisible] = useState(false)
+    const [planDetails,setPlanDetails]=useState({});
+    const [isLoading,setLoading]=useState(true);
+    const [daysData,setDaysData]=useState([]);
+    const [planDishes,setPlanDishes]=useState([]);
+    let days=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+
+    useEffect(()=>{
+      let daysArr=[];
+      fetch(`http://${IP.ip}:3000/weeklyPlan/getWeekDetails/${planId}`)
+      .then((response)=>response.json())
+      .then((response)=>setPlanDetails(response[0]))
+      // .then(()=>dispatch(getDishes(mealsData)))
+      // .then(()=>dispatch(getCategoricalData(mealsData)))
+
+      .then(()=>console.log(planDetails))
+      .then(()=>{
+        //let daysArr=[];
+        daysArr.push(planDetails["monday"]);
+        daysArr.push(planDetails["tuesday"]);
+        daysArr.push(planDetails["wednesday"]);
+        daysArr.push(planDetails["thursday"]);
+        daysArr.push(planDetails["friday"]);
+        daysArr.push(planDetails["saturday"]);
+        setDaysData(daysArr);
+        console.log(daysData);
+
+      })
+      .then(()=>{
+        //console.log(allDishes);
+       let selectedDishes= allDishes.filter(dish => daysArr.includes(dish.dish_id))
+       //console.log(allDishes.filter(dish => daysData.includes(dish.dish_id)))
+      
+       for(let i=0;i<selectedDishes.length;i++){
+         selectedDishes[i]["day"]=days[i]
+        
+       }
+       setPlanDishes(selectedDishes);
+       console.log("///  Slected Dishes //")
+       console.log(selectedDishes);
+       //people.filter(person => id_filter.includes(person.id))
+      // setCategoricalMeals(categories.filter(item=>filteredCuisines.includes(item.cuisine)));
+      })
+      .catch((error)=>console.error(error))
+      .finally(()=>setLoading(false));
+    },[isLoading]);
   
     function showItem(itemData) {
       return (
         <DayWiseFoodCard
-          img_url={itemData.item.img_url}
-          Day={itemData.item.Day}
-          DishName={itemData.item.DishName}
+          img_url={`http://${IP.ip}:3000/images/${itemData.item.image}`}
+          //Day={itemData.item.Day}
+          DishName={itemData.item.dish_name}
           price={itemData.item.price}
-          Category={itemData.item.Category}
+          Category={itemData.item.cat_name}
+          Day={itemData.item.day}
           onSelect={() => {
             console.log("clicked")
            
@@ -47,7 +98,7 @@ const WeeklyPlanDetailsScreen = (props) => {
       <View style={styles.plancard}>
         <View>
           <WeeklyPlanCard
-            imgurl={imageUrl}
+            imgurl={`http://${IP.ip}:3000/images/${imageURL}`}
             planname={planName}
             KitchenName={KitchenName}
             price={price}
@@ -60,9 +111,10 @@ const WeeklyPlanDetailsScreen = (props) => {
           <View style={styles.plantable}>
             <FlatList
               style={styles.flatlist}
-              data={DAYSDATA}
+              //data={DAYSDATA}
+              data={planDishes}
               renderItem={showItem}
-              keyExtractor={(item) => item.Day}
+              keyExtractor={(item) => item.dish_id}
             />
           <View style={{position: 'absolute', bottom: 5,left:0,right:0, justifyContent: 'center', alignItems: 'center'}}>
           <TouchableOpacity
