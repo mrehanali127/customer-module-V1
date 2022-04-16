@@ -16,10 +16,14 @@ import {
   Alert,
 } from "react-native"
 import { useState,useEffect } from "react"
+//import DatePicker from 'react-native-date-picker'
+import DatePicker from "@dietime/react-native-date-picker";
+
 import WeeklyPlanCard from "../components/weeklyPlanCard"
 import DayWiseFoodCard from "../components/DayWiseFoodCard"
 import { DAYSDATA } from "../constants/daysData"
 import IP from "../constants/IP"
+import Colors from "../constants/Colors";
 import { useSelector,useDispatch } from "react-redux";
 
 
@@ -30,13 +34,20 @@ const WeeklyPlanDetailsScreen = (props) => {
     const price = props.navigation.getParam("price")
     const planId=props.navigation.getParam("planId")
     const allDishes=useSelector(state=>state.dish.Dishes);
+    const customerData=useSelector(state=>state.dish.customerDetails);
 
     const [currentmodalVisible, setModalVisible] = useState(false)
     const [planDetails,setPlanDetails]=useState({});
     const [isLoading,setLoading]=useState(true);
     const [daysData,setDaysData]=useState([]);
     const [planDishes,setPlanDishes]=useState([]);
+    const [date, setDate] = useState(new Date());
+    const [chefId,setChefId]=useState('');
+    let expired_date = new Date();
+
+    let chef;
     let days=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+
 
     useEffect(()=>{
       let daysArr=[];
@@ -94,6 +105,57 @@ const WeeklyPlanDetailsScreen = (props) => {
         />
       )
     }
+
+
+  const getChefId=async ()=>{
+    await fetch(`http://${IP.ip}:3000/kitchen/${KitchenName}`)
+    .then((response)=>response.json())
+    .then((response)=>{
+      setChefId(response[0].chef_id)
+      chef=response[0].chef_id;
+    })
+
+    .then(()=>console.log(chefId))
+    .catch((error)=>console.error(error))
+  }
+
+  
+  const subscribeNewPlan=async ()=>{
+    await getChefId().then(()=>{
+      expired_date.setDate(date.getDate() + 7);
+      console.log("////  Data for subscribing new Plan  ////")
+      console.log(customerData.phone)
+      console.log(chef);
+      console.log(planId);
+      console.log(date);
+      console.log(expired_date);
+    })
+    .then(()=>{
+      let url=`http://${IP.ip}:3000/weeklyPlan//subscribePlan`;
+                let data={
+                    customer:customerData.phone,
+                    chef:chef,
+                    planId:planId,
+                    subDate:date,
+                    expDate:expired_date
+                    //totalAmount:subTotal
+                }
+                console.log(data);
+                fetch(url,{
+                    method:'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body:JSON.stringify(data)
+                })
+                .then((response)=>response.json())
+                .then(()=>{console.log("Plan Subscription Data added")})
+                .catch((error)=>console.log(error));
+    })
+    
+  }   
+
     return (
       <View style={styles.plancard}>
         <View>
@@ -140,12 +202,26 @@ const WeeklyPlanDetailsScreen = (props) => {
             }}>
             <View style={styles.subscribepopup}>
               <View style={styles.modalView}>
-                <Text style={styles.modalText}>Subscribed Weekly Plan!</Text>
-                <Text style={styles.planText}>Desi Khana</Text>
-                <Text style={styles.planText}>Ta'am Khana 2</Text>
-                <Text style={styles.planText}>2390 Rs.</Text>
+                <Text style={styles.modalText}>Subscribe Weekly Plan!</Text>
+                <Text style={styles.planText}>Weekly Plan:</Text>
+                <Text style={{color:Colors.lightBlack}}>{planName}</Text>
+                <Text style={styles.planText}>Kitchen Name:</Text>
+                <Text style={{color:Colors.lightBlack}}>{KitchenName}</Text>
+                <Text style={styles.planText}>Total:</Text>
+                <Text style={{color:Colors.lightBlack}}>Rs. {price}</Text>
+                <Text style={styles.planText}>Subscription Date:</Text>
+                {/* <DatePicker mode="date" date={date} onDateChange={setDate} /> */}
+                <View>
+                  <Text>{date ? date.toDateString() : "Select date..."}</Text>
+                  <DatePicker
+                      height={70}
+                      fontSize={14}
+                      value={date}
+                      onChange={(value) => setDate(value)}
+                  />
+              </View>
                 <Text style={styles.planText}>
-                  Kindly Confirm or Cancel the order!
+                  Kindly Confirm or Cancel the Weekly Plan!
                 </Text>
                 <View style={styles.modalbtn}>
                   <Pressable
@@ -159,10 +235,14 @@ const WeeklyPlanDetailsScreen = (props) => {
                   <Pressable
                     style={[styles.button, styles.btnConfirmCancel]}
                     onPress={() => {
-                      Alert.alert(
-                        "Your Weekly Plan has been Subscribed Successfully!"
-                      )
-                      setModalVisible(false)
+                      subscribeNewPlan().then(()=>{
+                        Alert.alert(
+                          "Your Weekly Plan has been Subscribed Successfully!"
+                        )
+                        setModalVisible(false);
+                        props.navigation.navigate("Home");
+                      })
+                     
                     }}>
                     <Text style={styles.textStyle}>Confirm</Text>
                   </Pressable>
@@ -220,7 +300,7 @@ const WeeklyPlanDetailsScreen = (props) => {
       backgroundColor: "#000a",
     },
     modalView: {
-      height: 350,
+      height: 430,
       width: "75%",
       elevation: 5,
       margin: 20,
@@ -261,15 +341,14 @@ const WeeklyPlanDetailsScreen = (props) => {
     },
     planText: {
       color: "black",
-      padding: 6,
-      fontSize: 18,
+      fontSize: 16,
       fontWeight: "bold",
     },
     modalbtn: {
       flexDirection: "row",
       justifyContent: "space-between",
       width: "100%",
-      marginTop: 50,
+      marginTop: 30,
       // paddingLeft: 20,
       // paddingRight: 20,
     },
