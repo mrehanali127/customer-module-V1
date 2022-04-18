@@ -14,17 +14,21 @@ import {
 } from "react-native"
 import WeeklyPlanCard from "../components/weeklyPlanCard"
 import {useEffect,useState} from "react";
+import { useSelector } from "react-redux";
 import IP from "../constants/IP";
 import { PLANSDATA } from "../constants/plansData";
 
-const WeeklyPlansListScreen = (props) => {
+const MyPlanScreen = (props) => {
 
   const [weeklyPlansList,setWeeklyPlansList]=useState([]);
   const [isLoading,setLoading]=useState(true);
 
+  const customerDetail=useSelector(state=>state.dish.customerDetails);
+
+
 
   useEffect(()=>{
-    fetch(`http://${IP.ip}:3000/weeklyPlan`)
+    fetch(`http://${IP.ip}:3000/weeklyPlan/cusomerPlan/${customerDetail.phone}`)
     .then((response)=>response.json())
     .then((response)=>setWeeklyPlansList(response))
     // .then(()=>dispatch(getDishes(mealsData)))
@@ -42,7 +46,9 @@ const WeeklyPlansListScreen = (props) => {
         planname={itemData.item.plan_name}
         KitchenName={itemData.item.kitchen_name}
         price={itemData.item.total}
-        // showButton={true}
+        subscribedDate={itemData.item.subscribed_date}
+        expiredDate={itemData.item.expired_date}
+        showButton={false}
         onSelect={() => {
           console.log("clicked")
          
@@ -54,7 +60,7 @@ const WeeklyPlansListScreen = (props) => {
               planId:itemData.item.plan_id,
               KitchenName: itemData.item.kitchen_name,
               price: itemData.item.total,
-              showButton:true,
+              showButton:false,
             },
           })
         }}
@@ -84,4 +90,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default WeeklyPlansListScreen
+export default MyPlanScreen;

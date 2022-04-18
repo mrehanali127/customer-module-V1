@@ -17,6 +17,8 @@ export const SEARCH_INPUT='SEARCH_INPUT';
 export const GET_SELECTED_CUISINES='GET_SELECTED_CUISINES';
 export const INCREASE_QUNATITY='INCREASE_QUNATITY';
 export const DECREASE_QUNATITY='DECREASE_QUNATITY';
+export const GET_CUSTOMER_ORDERS='GET_CUSTOMER_ORDERS';
+export const UPDATE_ORDER_STATUS='UPDATE_ORDER_STATUS';
 
 //export const DECREASE_VALUE='DECREASE_VALUE';
 
@@ -95,6 +97,14 @@ export const increaseQuantity=(item)=>{
 
 export const decreaseQuantity=(item)=>{
     return{type:DECREASE_QUNATITY,cartItemId:item};
+}
+
+export const getCustomerOrders=(items)=>{
+    return{type:GET_CUSTOMER_ORDERS,orders:items};
+}
+
+export const updateOrderStatus=(item,stat)=>{
+    return{type:UPDATE_ORDER_STATUS,orderId:item,status:stat};
 }
 
 

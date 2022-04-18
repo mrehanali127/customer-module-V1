@@ -46,6 +46,15 @@ const WeeklyPlanCard = (props) => {
               Rs. {props.price}
             </Text>
           </View>
+          {props.subscribedDate &&
+          <View style={{flexDirection:'row',justifyContent:'space-between',width:'95%'}}>
+          <Text style={styles.price} numberOfLines={1}>
+            {props.subscribedDate.substring(0, 10)}
+          </Text>
+          <Text style={styles.price} numberOfLines={1}>
+           {props.expiredDate.substring(0, 10)}
+          </Text>
+        </View>}
 
           {/* </LinearGradient> */}
         </View>

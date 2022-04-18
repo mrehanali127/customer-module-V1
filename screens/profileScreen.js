@@ -12,9 +12,12 @@ import {
   
  
 } from "react-native"
+import OrdersCard from "../components/ordersCard"
 import { Ionicons } from "@expo/vector-icons"
 import { Picker } from "@react-native-picker/picker"
 import { useSelector,useDispatch } from "react-redux"
+import { Fontisto } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 import { getCustomerDetail } from "../store/actions/dishActions"
 import Colors from "../constants/Colors"
 import IP from "../constants/IP"
@@ -89,7 +92,26 @@ const ProfileScreen = (props) => {
       <View style={{width:'100%',alignItems:'center',paddingVertical:15}}>
       <Text style={styles.nameHeader}>Hello! {customerDetail.firstname} {customerDetail.lastname}</Text>
       </View>
+
       <View style={styles.cardView}>
+      <View style={styles.buttonsContainer}>
+      <TouchableOpacity onPress={()=>props.navigation.navigate("MyOrders")}>
+      <View style={styles.numberContainer}>    
+          <Text style={styles.category}>My Orders</Text> 
+          <Fontisto name="shopping-bag-1" size={22} color={Colors.primaryColor} />     
+      </View>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={()=>props.navigation.navigate("MyPlan")}>
+      <View style={styles.numberContainer}>
+           <Text style={styles.category}>My Plans</Text> 
+          <FontAwesome5 name="calendar-week" size={22} color={Colors.primaryColor} />
+      </View>
+      </TouchableOpacity>
+      </View>
+      {/* <OrdersCard box1="Placed Orders" box2="Your Plans" myOrders={0} myPlans={0} 
+       onOrders={()=>props.navigation.navigate("MyOrders")}
+      /> */}
+
         {/* Fist name view */}
         <Text style={styles.fieldsname}>First Name</Text>
         <View style={styles.inputbox}>
@@ -197,6 +219,12 @@ const styles = StyleSheet.create({
 
 
   },
+  buttonsContainer:{
+    width:'100%',
+    height:50,
+    justifyContent:'space-around',
+    flexDirection:'row'
+  },
   fieldsname: {
     fontSize: 15,
     color: "black",
@@ -250,5 +278,30 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
   },
+  numberContainer:{
+
+    width:120,
+    height:40,
+    borderRadius:10,
+    shadowColor:Colors.lightBlack,
+    flexDirection:'row',
+    //shadowOpacity:0.16,
+    //shadowOffset:{width:0,height:2},
+    //shadowRadius:10, 
+   // elevation:1,
+   borderWidth:1,
+   borderColor:Colors.primaryColor,
+   paddingVertical:5,
+   marginTop:10,
+   paddingHorizontal:5,
+  justifyContent:'center',
+  alignItems:'center'
+},
+category:{
+  fontSize:16,
+  color:Colors.primaryColor,
+  textAlign:'center',
+  marginHorizontal:5
+} 
 })
 export default ProfileScreen

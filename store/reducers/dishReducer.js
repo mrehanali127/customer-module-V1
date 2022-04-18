@@ -7,7 +7,7 @@ import { GET_DISHES_DATA,GET_DISHES_OF_KITCHEN,
     SEARCH_INPUT,GET_SELECTED_CUISINES,
     ADD_INTO_CART_TABLE,REMOVE_FROM_CART_TABLE,
     INCREASE_QUNATITY,DECREASE_QUNATITY,
-    GET_CUSTOMER_DETAIL
+    GET_CUSTOMER_DETAIL,GET_CUSTOMER_ORDERS,UPDATE_ORDER_STATUS
  } from "../actions/dishActions";
 
 import IP from "../../constants/IP";
@@ -22,7 +22,8 @@ const initialState={
     cartTableData:[],
     categoricalDishes:[],
     searchInput:'',
-    selectedCuisines:[]
+    selectedCuisines:[],
+    CustomerOrders:[],
 }
 
 const dishReducer=(state=initialState,action)=>{
@@ -122,7 +123,19 @@ const dishReducer=(state=initialState,action)=>{
                             console.log(cartDataDec);
                             return {...state,cartTableData:cartDataDec};
                     }
-
+        case GET_CUSTOMER_ORDERS:
+            return {...state,CustomerOrders:action.orders};
+                      
+        case UPDATE_ORDER_STATUS:
+                const ifSelectedOrder=state.CustomerOrders.findIndex(order=>order.order_id===action.orderId);
+                    if(ifSelectedOrder>=0){
+                        let selectedOrder=state.CustomerOrders[ifSelectedOrder];
+                        selectedOrder.status=action.status;
+                        const ordersData=[...state.CustomerOrders];
+                        ordersData.splice(ifSelectedOrder, 1,selectedOrder);
+                        return {...state,CustomerOrders:ordersData};
+                    };
+                return state;
         default:
             return state;    
     }

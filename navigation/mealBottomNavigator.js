@@ -25,6 +25,8 @@ import SignupScreen from '../screens/signupScreen';
 import PasswordScreen from '../screens/passwordScreen';
 import OTPScreen from '../screens/otpTakingScreen';
 import NotificationScreen from '../screens/notificationScreen';
+import MyOrdersScreen from '../screens/myOrdersScreen';
+import MyPlanScreen from '../screens/myPlanScreen';
 
 
 const defaultNavConfiguration= {
@@ -74,7 +76,10 @@ const CartNavigator=createStackNavigator(
 
 const ProfileNavigator=createStackNavigator(
     {      
-        Profile:ProfileScreen,   
+        Profile:ProfileScreen,
+        MyOrders:MyOrdersScreen,  
+        MyPlan:MyPlanScreen, 
+        WeeklyPlanDetails:WeeklyPlanDetailsScreen  
     },defaultNavConfiguration
 );
 

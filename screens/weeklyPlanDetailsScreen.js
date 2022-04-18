@@ -33,6 +33,7 @@ const WeeklyPlanDetailsScreen = (props) => {
     const KitchenName = props.navigation.getParam("KitchenName")
     const price = props.navigation.getParam("price")
     const planId=props.navigation.getParam("planId")
+    const showBtn=props.navigation.getParam("showButton");
     const allDishes=useSelector(state=>state.dish.Dishes);
     const customerData=useSelector(state=>state.dish.customerDetails);
 
@@ -131,7 +132,7 @@ const WeeklyPlanDetailsScreen = (props) => {
       console.log(expired_date);
     })
     .then(()=>{
-      let url=`http://${IP.ip}:3000/weeklyPlan//subscribePlan`;
+      let url=`http://${IP.ip}:3000/weeklyPlan/subscribePlan`;
                 let data={
                     customer:customerData.phone,
                     chef:chef,
@@ -178,6 +179,7 @@ const WeeklyPlanDetailsScreen = (props) => {
               renderItem={showItem}
               keyExtractor={(item) => item.dish_id}
             />
+          {showBtn && 
           <View style={{position: 'absolute', bottom: 5,left:0,right:0, justifyContent: 'center', alignItems: 'center'}}>
           <TouchableOpacity
             style={styles.btnsubscribe}
@@ -188,7 +190,11 @@ const WeeklyPlanDetailsScreen = (props) => {
               <Text style={styles.btntext}>Subscribe</Text>
             </View>
           </TouchableOpacity>
+        
         </View>
+        }
+       
+        
          
         </View>
         {/* </ScrollView> */}
