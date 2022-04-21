@@ -54,6 +54,7 @@ const WeeklyPlansListScreen = (props) => {
               planId:itemData.item.plan_id,
               KitchenName: itemData.item.kitchen_name,
               price: itemData.item.total,
+              token:itemData.item.push_token,
               showButton:true,
             },
           })

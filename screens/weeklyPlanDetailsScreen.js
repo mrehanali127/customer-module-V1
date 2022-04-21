@@ -34,6 +34,7 @@ const WeeklyPlanDetailsScreen = (props) => {
     const price = props.navigation.getParam("price")
     const planId=props.navigation.getParam("planId")
     const showBtn=props.navigation.getParam("showButton");
+    const pushToken=props.navigation.getParam("token");
     const allDishes=useSelector(state=>state.dish.Dishes);
     const customerData=useSelector(state=>state.dish.customerDetails);
 
@@ -155,7 +156,50 @@ const WeeklyPlanDetailsScreen = (props) => {
                 .catch((error)=>console.log(error));
     })
     
-  }   
+  }  
+  
+  
+  const sendNotifications=async ()=>{
+        await fetch('https://exp.host/--/api/v2/push/send',{
+            method:'POST',
+            headers:{
+                'Accept':'application/json',
+                'Accept-Encoding':'gzip,deflate',
+                'Content-Type':'application/json'
+            },
+            body: JSON.stringify({
+                to:pushToken,
+                data:{
+                   
+                },
+                title:'New Weekly Plan Subscription!!',
+                body:"Customer wants to subscribe your plan",  
+                //experienceId: "@rehan.ali/chef-module-V1",
+            })
+        }).then(()=>console.log("Chef's Notification Send"))
+            .then(()=>{
+                    //send notification to Admin
+            fetch('https://exp.host/--/api/v2/push/send',{
+                method:'POST',
+                headers:{
+                    'Accept':'application/json',
+                    'Accept-Encoding':'gzip,deflate',
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify({
+                    to:'ExponentPushToken[jXY39COY1qo-vtkAP4_dnh]',
+                    data:{
+                    },
+                    title:'New Weekly Plan Subscription',
+                    body:`Customer Subscribing Weekly Plan`,  
+                    experienceId: "@rehan.ali/Admin-module-app-V1",
+                })
+            }).then(()=>{
+                console.log("Notification Sent to Admin")
+            })
+            })
+
+}
 
     return (
       <View style={styles.plancard}>
@@ -241,7 +285,9 @@ const WeeklyPlanDetailsScreen = (props) => {
                   <Pressable
                     style={[styles.button, styles.btnConfirmCancel]}
                     onPress={() => {
-                      subscribeNewPlan().then(()=>{
+                      subscribeNewPlan()
+                      .then(()=>sendNotifications())
+                      .then(()=>{
                         Alert.alert(
                           "Your Weekly Plan has been Subscribed Successfully!"
                         )
