@@ -1,5 +1,5 @@
 import React from "react";
-import { View,Text,StyleSheet, Button, FlatList, Dimensions,TouchableOpacity,RefreshControl,Alert,Modal } from "react-native";
+import { View,Text,StyleSheet, Button, FlatList, Dimensions,TouchableOpacity,RefreshControl,Alert,Modal,Image,ToastAndroid } from "react-native";
 import Colors from '../constants/Colors';
 
 import { useEffect, useState } from "react";
@@ -17,10 +17,18 @@ const MyOrdersScreen=(props)=>{
     //const [customerOrders,setCustomerOrders]=useState([]);
     const [refreshing,setRefreshing]=useState(true);
     const [showModal,setShowModal]=useState(false);
+    const [showRateModal,setShowRateModal]=useState(false);
     const [selectedOrderId,setSelectedOrderId]=useState(0);
+    const [ratedOrderId,setRatedOrderId]=useState(0);
     const [selectedKitchen,setSelectedKitchen]=useState('');
     const [customerData,setCustomerData]=useState({});
     const [items,setItems]=useState([]);
+
+    const [defaultRating,setDefaultRating]=useState(2);
+    const [maxRating,setMaxRating]=useState([1,2,3,4,5]);
+
+    const starImgFilled='https://raw.githubusercontent.com/tranhonghan/images/main/star_filled.png';
+    const starImgCorner='https://raw.githubusercontent.com/tranhonghan/images/main/star_corner.png';
 
     const customerDetail=useSelector(state=>state.dish.customerDetails);
     const customerOrders=useSelector(state=>state.dish.CustomerOrders);
@@ -86,6 +94,11 @@ const MyOrdersScreen=(props)=>{
                     getOrderDetailsList(itemData.item.order_id);
                     console.log(selectedOrderId);
                     setShowModal(true);
+            }}
+            onRate={()=>{
+                setRatedOrderId(itemData.item.order_id);
+                setDefaultRating(itemData.item.rating);
+                setShowRateModal(true);
             }}
 
             onSelect={()=>{
@@ -183,6 +196,34 @@ const MyOrdersScreen=(props)=>{
         )
         }
 
+        const CustomRatingBar=()=>{
+            return(
+                <View style={styles.customRatingBarStyle}>
+                    {
+                        maxRating.map((item,key)=>{
+                            return(
+                                <TouchableOpacity
+                                activeOpacity={0.7}
+                                key={item}
+                                onPress={()=>setDefaultRating(item)}
+                                >
+                                
+                                <Image
+                                style={styles.starImgStyle}
+                                source={
+                                    item<=defaultRating
+                                    ? {uri:starImgFilled}
+                                    : {uri:starImgCorner}
+                                }
+                                />
+
+                                </TouchableOpacity>
+                            )
+                        })
+                    }
+                </View>
+            )
+        }
 
         return(
           <View style={styles.screen}>
@@ -231,6 +272,66 @@ const MyOrdersScreen=(props)=>{
                     }}>       
                 <View style={{...styles.buttonContainer,backgroundColor:Colors.primaryLightColor,paddingHorizontal:10,borderRadius:10}}>
                     <Text style={{...styles.btnTitle,fontSize:14}}>OK</Text>
+                </View>
+                </TouchableOpacity>
+                </View>
+
+                </View>
+                </View>
+            </Modal>
+
+
+
+
+
+            <Modal
+                transparent={true}
+                visible={showRateModal}>
+                <View style={{backgroundColor:'#000000aa',flex:1}}>
+                    <View style={{backgroundColor:'#fff',margin:40,marginTop:120,borderRadius:10,padding:10}}>
+                    <View style={styles.orderHeader}>
+                    <Text style={styles.headerText}>Rate Us!!</Text>
+                    </View>
+                    <Text style={styles.subTitle}>Your time is required to get review. This will help us to improve our service.</Text>
+                    <Text style={styles.subTitle}>Kindly Rate This Order</Text>
+                   <CustomRatingBar/>
+                   <View style={styles.textContainer}>
+                   <Text style={styles.textStyle}>
+                       {defaultRating===1 && 'Very Poor'}
+                       {defaultRating===2 && 'Poor'}
+                       {defaultRating===3 && 'Satisfactory'}
+                       {defaultRating===4 && 'Good'}
+                       {defaultRating===5 && 'Very Good'}
+                   </Text>
+                   </View>
+
+                   
+                    <View>
+                   
+                    </View>
+
+                    {/*<OrderDetailsTable orderID={selectedOrderId}/>*/}   
+                <View style={{...styles.btnContainer,justifyContent:'flex-end'}}>
+                <TouchableOpacity onPress={()=>{
+                    let hittingUrl=`http://${IP.ip}:3000/order/updateRating/${ratedOrderId}`;
+                    let data={
+                        rating:defaultRating,
+                    }
+                    fetch(hittingUrl,{
+                        method:'PUT',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json'
+                          },
+                        body:JSON.stringify(data)
+                    }).then((response)=>response.json())
+                     .then(()=>setShowRateModal(false))
+                     .then(()=>ToastAndroid.show(`Your feedback has been saved`, ToastAndroid.SHORT))
+                    .catch((error)=>console.error(error)) 
+                    
+                    }}>       
+                <View style={{...styles.buttonContainer,backgroundColor:Colors.primaryLightColor,paddingHorizontal:10,borderRadius:10}}>
+                    <Text style={{...styles.btnTitle,fontSize:14}}>Submit</Text>
                 </View>
                 </TouchableOpacity>
                 </View>
@@ -293,6 +394,28 @@ const styles=StyleSheet.create(
             fontSize:16,
             color:"#000"
         },
+        customRatingBarStyle:{
+            justifyContent:'center',
+            flexDirection:'row',
+            margin:5,
+        },
+        starImgStyle:{
+            width:30,
+            height:30,
+            resizeMode:'cover'
+        },
+        textStyle:{
+            fontSize:16,
+            fontWeight:'bold',
+          
+        },
+        textContainer:{
+            justifyContent:'center',
+            width:'100%',
+            alignItems:'center'
+        }
+
+
        
     }
 )

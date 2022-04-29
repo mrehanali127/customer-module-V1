@@ -48,6 +48,35 @@ const  OrderCard=props=>{
             }
             </View>
             }
+
+
+                  
+            {props.currentStatus==='delivered' &&
+            <View>
+            {props.forOrderScreen &&
+            <View>
+            <View style={styles.notificationContainer}>
+            <Text style={{...styles.subTitle}}>How was your experience. Kindly rate us!!</Text>
+            </View>
+            <View style={styles.btnContainer}>
+            <TouchableOpacity onPress={props.onRate}>
+                <View style={{...styles.buttonContainer}}>
+                    <Text style={styles.btnTitle}>Rate Us</Text>
+                </View>
+            </TouchableOpacity>
+            {/* <TouchableOpacity onPress={props.onSelect}>
+                <View style={{...styles.buttonContainer}}>
+                    <Text style={styles.btnTitle}>Confirm</Text>
+                </View>
+            </TouchableOpacity> */}
+            </View>
+            </View>
+            }
+            </View>
+            }
+
+
+
         </View>
     )
 };
