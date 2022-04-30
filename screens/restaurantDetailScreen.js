@@ -32,6 +32,9 @@ const RestaurantDetailScreen=(props)=>{
         const kitchenLogo=props.navigation.getParam('kitchenLogo');
         const startTime=props.navigation.getParam('startTime');
         const endTime=props.navigation.getParam('endTime');
+        const rating=props.navigation.getParam('rating');
+        console.log("///// Rating ////");
+        console.log(rating);
 
 
         const renderFoodItem=(itemData)=>{
@@ -57,6 +60,7 @@ const RestaurantDetailScreen=(props)=>{
             <View style={styles.container}>
                 <View style={styles.kitchenContainer}>
               <KitchenCard kitchenName={kitchenName} kitchenLogo={kitchenLogo} startTime={startTime}
+              rating={rating}
             endTime={endTime}/>
             </View>
             {dishes.length>0 &&

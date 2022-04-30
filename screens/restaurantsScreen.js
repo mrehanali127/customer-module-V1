@@ -10,19 +10,56 @@ import { useEffect, useState } from "react";
 const RestaurantsScreen=(props)=>{
     const [isLoading,setLoading]=useState(true);
     const [kitchensData,setkitchensData]=useState([]);
+    const [kitchensRating,setKitchensRating]=useState([]);
+    let selectedRating;
+    let currentRating;
+    
 
     useEffect(()=>{
         fetch(`http://${IP.ip}:3000/kitchen`)
         .then((response)=>response.json())
         .then((response)=>setkitchensData(response))
         .catch((error)=>console.error(error))
-        .finally(()=>setLoading(false));
+        
       },[]);
 
+
+
+      useEffect(()=>{
+        fetch(`http://${IP.ip}:3000/order/ratingRecord/rating`)
+        .then((response)=>response.json())
+        .then((response)=>{setKitchensRating(response)
+                         
+        }
+         )
+        .then(()=>console.log(kitchensRating))
+        .catch((error)=>console.error(error))
+        .finally(()=>setLoading(false));
+      },[isLoading]);
+
+
+
       const renderKitchenCard=(itemData)=>{
+        
+        let ratingObject = kitchensRating.find(obj => obj.chef_id === itemData.item.chef_id);
+        console.log(ratingObject);
+        if(ratingObject){
+            let rating=Math.ceil(ratingObject.totalRating/ratingObject.deliveredOrders)
+            console.log("////////////")
+            console.log(itemData.item.chef_id);
+            console.log(rating);
+            currentRating=rating;
+            selectedRating=rating;
+        }
+        else{
+            currentRating=3;
+        }
+        
         return(
            <KitchenCard kitchenName={itemData.item.kitchen_name} kitchenLogo={itemData.item.logo} startTime={itemData.item.start_time}
             endTime={itemData.item.end_time}
+            chefId={itemData.item.chef_id}
+            rating={currentRating}
             onSelect={()=>{
                 props.navigation.navigate({
                     routeName:'RestaurantDetail',
@@ -30,7 +67,8 @@ const RestaurantsScreen=(props)=>{
                       kitchenName:itemData.item.kitchen_name,
                       kitchenLogo:itemData.item.logo,
                       startTime:itemData.item.start_time,
-                      endTime:itemData.item.end_time
+                      endTime:itemData.item.end_time,
+                      rating:currentRating===selectedRating?currentRating:selectedRating
 
 
                     }

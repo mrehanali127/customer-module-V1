@@ -6,6 +6,39 @@ import IP from "../constants/IP";
 
 
 const KitchenCard=props=>{
+
+    const starImgFilled='https://raw.githubusercontent.com/tranhonghan/images/main/star_filled.png';
+    const starImgCorner='https://raw.githubusercontent.com/tranhonghan/images/main/star_corner.png';
+    const [rating,setRating]=useState(props.rating);
+    const [maxRating,setMaxRating]=useState([1,2,3,4,5]);
+
+    console.log(props.rating);
+
+    const CustomRatingBar=()=>{
+        return(
+            <View style={styles.rating}>
+                {
+                    maxRating.map((item,key)=>{
+                        return(
+                           
+                            <Image
+                            style={styles.starImgStyle}
+                            key={item}
+                            source={
+                                item<=props.rating
+                                ? {uri:starImgFilled}
+                                : {uri:starImgCorner}
+                            }
+                            />
+
+                        )
+                    })
+                }
+            </View>
+        )
+    }
+
+
    
     return(
         <View style={styles.kitchenCard}>
@@ -17,11 +50,12 @@ const KitchenCard=props=>{
         <View style={styles.nameRating}>
             <Text style={styles.kitchenName}>{props.kitchenName}</Text>
             <View style={styles.rating}>
-            <FontAwesome name="star" size={18} color={Colors.primaryLightColor} />
+                <CustomRatingBar/>
+            {/* <FontAwesome name="star" size={18} color={Colors.primaryLightColor} />
             <FontAwesome name="star" size={18} color={Colors.primaryLightColor} />
             <FontAwesome name="star" size={18} color={Colors.primaryLightColor} />
             <FontAwesome name="star-half-empty" size={18} color={Colors.primaryLightColor} />
-            <FontAwesome name="star-o" size={18} color={Colors.primaryLightColor} />
+            <FontAwesome name="star-o" size={18} color={Colors.primaryLightColor} /> */}
             </View>
             <View>
                 <Text style={styles.numDishes}>15 DISHES</Text>
@@ -119,7 +153,12 @@ const styles=StyleSheet.create({
     },
     timeData:{
         color:Colors.lightBlack
-    }
+    },
+    starImgStyle:{
+        width:20,
+        height:20,
+        resizeMode:'cover'
+    },
 
 });
 
