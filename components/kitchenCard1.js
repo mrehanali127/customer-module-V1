@@ -10,6 +10,7 @@ const KitchenCard=props=>{
     const starImgFilled='https://raw.githubusercontent.com/tranhonghan/images/main/star_filled.png';
     const starImgCorner='https://raw.githubusercontent.com/tranhonghan/images/main/star_corner.png';
     const [rating,setRating]=useState(props.rating);
+    //const [numDishes,setNumDishes]=useState(props.dishes);
     const [maxRating,setMaxRating]=useState([1,2,3,4,5]);
 
     console.log(props.rating);
@@ -58,7 +59,7 @@ const KitchenCard=props=>{
             <FontAwesome name="star-o" size={18} color={Colors.primaryLightColor} /> */}
             </View>
             <View>
-                <Text style={styles.numDishes}>15 DISHES</Text>
+                <Text style={styles.numDishes}>{props.dishes} DISHES</Text>
             </View>
         </View>
         </View>

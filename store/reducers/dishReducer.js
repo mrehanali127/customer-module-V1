@@ -1,4 +1,5 @@
 import { GET_DISHES_DATA,GET_DISHES_OF_KITCHEN,
+    GET_KITCHENS_DATA,GET_NUM_DISHES,GET_RATING_DATA,GET_CHEF_DATA,
     MANAGE_CART_ITEMS,MANAGE_FAVORITES,
     TOGGLE_FAVORITE,REMOVE_CART_ITEM,
     ADD_CART_ITEM,EMPTY_THE_CART,EMPTY_THE_CART_TABLE,
@@ -24,6 +25,10 @@ const initialState={
     searchInput:'',
     selectedCuisines:[],
     CustomerOrders:[],
+    kitchens:[],
+    chefs:[],
+    ratingsOfKitchens:[],
+    numOfDishes:[]
 }
 
 const dishReducer=(state=initialState,action)=>{
@@ -33,6 +38,19 @@ const dishReducer=(state=initialState,action)=>{
 
         case GET_DISHES_DATA:
           return {...state,Dishes:action.dishes};
+        
+        case GET_KITCHENS_DATA:
+            return {...state,kitchens:action.kitchens};
+
+        case GET_CHEF_DATA:
+            return {...state,chefs:action.chefs};
+            
+        case GET_RATING_DATA:
+            return {...state,ratingsOfKitchens:action.ratings};
+        
+        case GET_NUM_DISHES:
+            return {...state,numOfDishes:action.numDishes};
+            
         
           case GET_CUSTOMER_DETAIL:
             return {...state,customerDetails:action.customer};

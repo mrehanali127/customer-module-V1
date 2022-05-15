@@ -17,9 +17,32 @@ const FoodItemDetailsScreen=(props)=>{
       const[kitchens,setKitchens]=useState([]);
       const dispatch=useDispatch();
       const customerDetail=useSelector(state=>state.dish.customerDetails);
+      const allChefs=useSelector(state=>state.dish.chefs);
+      const allKitchens=useSelector(state=>state.dish.kitchens);
+      const ratings=useSelector(state=>state.dish.ratingsOfKitchens);
+      const numOfDishes=useSelector(state=>state.dish.numOfDishes);
+      const kitchenName=props.navigation.getParam('kitchenName');
+
+      const selectedKitchen=allKitchens.filter(kitchen=>kitchen.kitchen_name===kitchenName);
+      const selectedChef=allChefs.filter(chef=>chef.chef_id===selectedKitchen[0].chef_id);
+      const selectedRating=ratings.filter(rating=>rating.chef_id===selectedChef[0].chef_id);
+      const selectedRatingObj=selectedRating[0];
+
+      let currentRating;
+      if(selectedRatingObj){
+          let rating=Math.ceil(selectedRatingObj.totalRating/selectedRatingObj.deliveredOrders)
+          console.log(rating);
+          currentRating=rating;
+      }
+      else{
+          currentRating=3;
+      }
+
+      let numDishes;
+    
 
       useEffect(()=>{
-        const kitchenName=props.navigation.getParam('kitchenName');
+        
         fetch(`http://${IP.ip}:3000/kitchen/${kitchenName}`)
         .then((response)=>response.json())
         .then((response)=>setKitchens(response))
@@ -128,6 +151,15 @@ const FoodItemDetailsScreen=(props)=>{
     }
 
 
+        let dishesObj=numOfDishes.find(obj => obj.kitchen_name === kitchenName);
+        if(dishesObj){
+            numDishes=dishesObj.dishes;
+        }
+        else{
+            numDishes=0;
+        }
+
+
     return(
         <ScrollView showsVerticalScrollIndicator={false}>
         <View>
@@ -166,6 +198,8 @@ const FoodItemDetailsScreen=(props)=>{
         {kitchens.length>0 &&
         <KitchenCard kitchenName={kitchens[0].kitchen_name} kitchenLogo={kitchens[0].logo}
         startTime={kitchens[0].start_time} endTime={kitchens[0].end_time} 
+        dishes={numDishes}
+        rating={currentRating}
         onSelect={()=>{           
             props.navigation.navigate({
                 routeName:'RestaurantDetail',

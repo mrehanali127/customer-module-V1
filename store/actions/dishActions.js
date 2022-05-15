@@ -1,4 +1,8 @@
 export const GET_DISHES_DATA='GET_DISHES_DATA';
+export const GET_KITCHENS_DATA='GET_KITCHENS_DATA';
+export const GET_CHEF_DATA='GET_CHEF_DATA';
+export const GET_RATING_DATA='GET_RATING_DATA';
+export const GET_NUM_DISHES='GET_NUM_DISHES';
 export const GET_CUSTOMER_DETAIL='GET_CUSTOMER_DETAIL';
 export const GET_CATEGORICAL_DATA='GET_CATEGORICAL_DATA';
 export const APPLY_CATEGORY='APPLY_CATEGORY';
@@ -102,6 +106,22 @@ export const decreaseQuantity=(item)=>{
 export const getCustomerOrders=(items)=>{
     return{type:GET_CUSTOMER_ORDERS,orders:items};
 }
+
+export const getKitchensData=(items)=>{
+    return{type:GET_KITCHENS_DATA,kitchens:items};
+}
+
+export const getChefsData=(items)=>{
+    return{type:GET_CHEF_DATA,chefs:items};
+}
+
+export const getRatingData=(items)=>{
+    return{type:GET_RATING_DATA,ratings:items};
+}
+export const getNumDishes=(items)=>{
+    return{type:GET_NUM_DISHES,numDishes:items};
+}
+
 
 export const updateOrderStatus=(item,stat)=>{
     return{type:UPDATE_ORDER_STATUS,orderId:item,status:stat};

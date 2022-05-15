@@ -16,7 +16,27 @@ const RestaurantDetailScreen=(props)=>{
 
         const kitchenName=props.navigation.getParam('kitchenName');
         const allDishes=useSelector(state=>state.dish.Dishes);
+        const allChefs=useSelector(state=>state.dish.chefs);
+        const allKitchens=useSelector(state=>state.dish.kitchens);
+        const ratings=useSelector(state=>state.dish.ratingsOfKitchens);
         const dishes=allDishes.filter(dish=>dish.kitchen_name===kitchenName);
+       
+        const selectedKitchen=allKitchens.filter(kitchen=>kitchen.kitchen_name===kitchenName);
+        const selectedChef=allChefs.filter(chef=>chef.chef_id===selectedKitchen[0].chef_id);
+       
+        const selectedRating=ratings.filter(rating=>rating.chef_id===selectedChef[0].chef_id);
+        const selectedRatingObj=selectedRating[0];
+
+        let currentRating;
+
+        if(selectedRatingObj){
+            let rating=Math.ceil(selectedRatingObj.totalRating/selectedRatingObj.deliveredOrders)
+            console.log(rating);
+            currentRating=rating;
+        }
+        else{
+            currentRating=3;
+        }
 
         /*
         useEffect(()=>{
@@ -32,9 +52,10 @@ const RestaurantDetailScreen=(props)=>{
         const kitchenLogo=props.navigation.getParam('kitchenLogo');
         const startTime=props.navigation.getParam('startTime');
         const endTime=props.navigation.getParam('endTime');
-        const rating=props.navigation.getParam('rating');
-        console.log("///// Rating ////");
-        console.log(rating);
+        //const rating=props.navigation.getParam('rating');
+        const numDishes=props.navigation.getParam('dishes');
+        //console.log("///// Rating ////");
+        //console.log(rating);
 
 
         const renderFoodItem=(itemData)=>{
@@ -60,7 +81,8 @@ const RestaurantDetailScreen=(props)=>{
             <View style={styles.container}>
                 <View style={styles.kitchenContainer}>
               <KitchenCard kitchenName={kitchenName} kitchenLogo={kitchenLogo} startTime={startTime}
-              rating={rating}
+              rating={currentRating}
+              dishes={dishes.length}
             endTime={endTime}/>
             </View>
             {dishes.length>0 &&

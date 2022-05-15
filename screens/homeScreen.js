@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { useSelector,useDispatch } from "react-redux";
 import { Ionicons } from '@expo/vector-icons';
 import CuisineTile from "../components/cuisineTile";
-import { getDishes,getCategoricalData,getSelectedCuisines } from "../store/actions/dishActions";
+import { getDishes,getCategoricalData,getKitchensData,getRatingData,getNumDishes,getChefsData,getSelectedCuisines } from "../store/actions/dishActions";
 import FilterModal from "../components/filterModal";
 import WeeklyPlanCardHome from "../components/weeklyPlanCardHome";
 
@@ -17,6 +17,7 @@ import WeeklyPlanCardHome from "../components/weeklyPlanCardHome";
 const HomeScreen=(props)=>{
 
     const [isLoading,setLoading]=useState(true);
+    const [kitchensDataLoading,setKitchensDataLoading]=useState(true);
     const [mealsData,setmealsData]=useState([]);
     const [showModal,setShowModal]=useState(false);
     const [categoricalMeals,setCategoricalMeals]=useState([]);
@@ -32,6 +33,17 @@ const HomeScreen=(props)=>{
     
     const searchingFood=useSelector(state=>state.dish.searchInput);
     
+    useEffect(()=>{
+        fetch(`http://${IP.ip}:3000/kitchen`)
+        .then((response)=>response.json())
+        .then((response)=>dispatch(getKitchensData(response)))
+        .then(async()=>{
+            fetch(`http://${IP.ip}:3000/chef`)
+            .then((response)=>response.json())
+            .then((response)=>dispatch(getChefsData(response)))
+        })
+        .catch((error)=>console.error(error))
+      },[]);
 
     useEffect(()=>{
         setCategoricalMeals(categories);
@@ -46,6 +58,20 @@ const HomeScreen=(props)=>{
         .catch((error)=>console.error(error))
         .finally(()=>setLoading(false));
       },[isLoading]);
+    
+      useEffect(()=>{
+        fetch(`http://${IP.ip}:3000/order/ratingRecord/rating`)
+        .then((response)=>response.json())
+        .then(async(response)=>{ dispatch(getRatingData(response));
+           await fetch(`http://${IP.ip}:3000/dish/dishes/numOfDishes`)
+            .then((response)=>response.json())
+            .then((response)=>dispatch(getNumDishes(response))       
+         )
+        })
+        .catch((error)=>console.error(error))
+        .finally(()=>setKitchensDataLoading(false));
+      },[kitchensDataLoading]);
+  
     
     
     
