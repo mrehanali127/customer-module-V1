@@ -15,6 +15,7 @@ const FoodItemDetailsScreen=(props)=>{
 
       const[isLoading,setLoading]=useState(true);
       const[kitchens,setKitchens]=useState([]);
+      const[specialDishes,setSpecialDishes]=useState([]);
       const dispatch=useDispatch();
       const customerDetail=useSelector(state=>state.dish.customerDetails);
       const allChefs=useSelector(state=>state.dish.chefs);
@@ -22,9 +23,12 @@ const FoodItemDetailsScreen=(props)=>{
       const ratings=useSelector(state=>state.dish.ratingsOfKitchens);
       const numOfDishes=useSelector(state=>state.dish.numOfDishes);
       const kitchenName=props.navigation.getParam('kitchenName');
+      const allDishes=useSelector(state=>state.dish.Dishes);
+
 
       const selectedKitchen=allKitchens.filter(kitchen=>kitchen.kitchen_name===kitchenName);
       const selectedChef=allChefs.filter(chef=>chef.chef_id===selectedKitchen[0].chef_id);
+      const selectedChefId=selectedKitchen[0].chef_id;
       const selectedRating=ratings.filter(rating=>rating.chef_id===selectedChef[0].chef_id);
       const selectedRatingObj=selectedRating[0];
 
@@ -47,8 +51,29 @@ const FoodItemDetailsScreen=(props)=>{
         .then((response)=>response.json())
         .then((response)=>setKitchens(response))
         .catch((error)=>console.error(error))
-        .finally(()=>setLoading(false));
+        //.finally(()=>setLoading(false));
       },[]);
+
+      useEffect(()=>{
+        fetch(`http://${IP.ip}:3000/kitchen/specialDishes/${selectedChefId}`)
+        .then((response)=>response.json())
+        .then((response)=>setSpecialDishes(response))
+        .catch((error)=>console.error(error))
+        .finally(()=>setLoading(false));
+        },[isLoading]);
+
+    
+        const specialDishesData = allDishes.filter( all => {
+            return specialDishes.some( filtered => {
+              return filtered.dish_id === all.dish_id;
+            });
+          });
+        
+
+        const specialDishesNames = specialDishesData.map((item)=>item.dish_name);
+        console.log("// Specail Dishes Names //")
+        console.log(specialDishesNames);
+
 
       //console.log(kitchens);
 
@@ -200,6 +225,10 @@ const FoodItemDetailsScreen=(props)=>{
         startTime={kitchens[0].start_time} endTime={kitchens[0].end_time} 
         dishes={numDishes}
         rating={currentRating}
+        special1={specialDishesNames[0]}
+        special2={specialDishesNames[1]}
+        address={selectedChef[0].address}
+        locality={selectedChef[0].locality}
         onSelect={()=>{           
             props.navigation.navigate({
                 routeName:'RestaurantDetail',

@@ -10,6 +10,7 @@ const KitchenCard=props=>{
     const starImgFilled='https://raw.githubusercontent.com/tranhonghan/images/main/star_filled.png';
     const starImgCorner='https://raw.githubusercontent.com/tranhonghan/images/main/star_corner.png';
     const [rating,setRating]=useState(props.rating);
+   
     //const [numDishes,setNumDishes]=useState(props.dishes);
     const [maxRating,setMaxRating]=useState([1,2,3,4,5]);
 
@@ -64,10 +65,22 @@ const KitchenCard=props=>{
         </View>
         </View>
         <View style={styles.moreDetails}>
-        
-        <Text style={styles.specialHeader}>DISH SPECIALITIES</Text>
+        {props.special1 &&
         <View>
-            <Text style={styles.dishes}>Chicken Biryani, Chicken Karahi</Text>
+        <Text style={{...styles.specialHeader,marginTop:0}}>DISH SPECIALITIES</Text>
+        <View>
+            <Text style={styles.dishes}>{props.special1},{props.special2}</Text>
+        </View>
+        </View>
+        }
+        {/* {!props.special1 &&
+        <View style={{marginTop:20}}></View>
+        } */}
+        <View>
+        <Text style={{...styles.specialHeader}}>LOCATION</Text>
+        <View>
+            <Text style={styles.dishes}>{props.address}, {props.locality}</Text>
+        </View>
         </View>
         <View style={styles.timeDetail}>
             <View style={styles.time}>
@@ -90,18 +103,21 @@ const styles=StyleSheet.create({
 
 
     kitchenCard:{
-         height:180,
+        // height:220,
+         flex:1,
          width:'95%',
          backgroundColor:'#f5f5f5',
          borderRadius:15,
          elevation:5,
          overflow:'hidden',
          marginVertical:5,
-         marginHorizontal:10
+         marginHorizontal:10,
+         paddingBottom:5
+
        
     },
     kitchenHeader:{
-        height:'55%',
+        height:100,
         width:'100%',
         padding:15,
         flexDirection:'row',

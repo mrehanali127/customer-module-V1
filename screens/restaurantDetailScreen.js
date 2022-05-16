@@ -13,6 +13,7 @@ const RestaurantDetailScreen=(props)=>{
 
         const[isLoading,setLoading]=useState(true);
         //const[dishes,setDishes]=useState([]);
+        const[specialDishes,setSpecialDishes]=useState([]);
 
         const kitchenName=props.navigation.getParam('kitchenName');
         const allDishes=useSelector(state=>state.dish.Dishes);
@@ -22,7 +23,9 @@ const RestaurantDetailScreen=(props)=>{
         const dishes=allDishes.filter(dish=>dish.kitchen_name===kitchenName);
        
         const selectedKitchen=allKitchens.filter(kitchen=>kitchen.kitchen_name===kitchenName);
+
         const selectedChef=allChefs.filter(chef=>chef.chef_id===selectedKitchen[0].chef_id);
+        const selectedChefId=selectedKitchen[0].chef_id;
        
         const selectedRating=ratings.filter(rating=>rating.chef_id===selectedChef[0].chef_id);
         const selectedRatingObj=selectedRating[0];
@@ -38,15 +41,31 @@ const RestaurantDetailScreen=(props)=>{
             currentRating=3;
         }
 
-        /*
+      
         useEffect(()=>{
-        const kitchenName=props.navigation.getParam('kitchenName');
-        fetch(`http://${IP.ip}:3000/dish/kitchen/${kitchenName}`)
+        fetch(`http://${IP.ip}:3000/kitchen/specialDishes/${selectedChefId}`)
         .then((response)=>response.json())
-        .then((response)=>setDishes(response))
+        .then((response)=>setSpecialDishes(response))
         .catch((error)=>console.error(error))
         .finally(()=>setLoading(false));
-        },[]);*/
+        },[isLoading]);
+
+        console.log("// Special Dishes //");
+        console.log(specialDishes);
+        //const specialDishesData=allDishes.filter(dish=>dish.dish_id===specialDishes.);
+        // const specialDishesData = allDishes.filter(all => 
+        //     specialDishes.every(special => special.dish_id === all.dish_id));
+        const specialDishesData = allDishes.filter( all => {
+            return specialDishes.some( filtered => {
+              return filtered.dish_id === all.dish_id;
+            });
+          });
+        
+
+        const specialDishesNames = specialDishesData.map((item)=>item.dish_name);
+        console.log("// Specail Dishes Names //")
+        console.log(specialDishesNames);
+
 
         //const kitchenName=props.navigation.getParam('kitchenName');
         const kitchenLogo=props.navigation.getParam('kitchenLogo');
@@ -83,6 +102,10 @@ const RestaurantDetailScreen=(props)=>{
               <KitchenCard kitchenName={kitchenName} kitchenLogo={kitchenLogo} startTime={startTime}
               rating={currentRating}
               dishes={dishes.length}
+              special1={specialDishesNames[0]}
+              special2={specialDishesNames[1]}
+              address={selectedChef[0].address}
+              locality={selectedChef[0].locality}
             endTime={endTime}/>
             </View>
             {dishes.length>0 &&
@@ -104,6 +127,7 @@ const styles=StyleSheet.create(
         },
         kitchenContainer:{
            width:'100%',
+           height:250,
            backgroundColor:Colors.primaryColor,
            paddingVertical:5
           
