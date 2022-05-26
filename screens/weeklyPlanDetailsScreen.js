@@ -274,15 +274,15 @@ const WeeklyPlanDetailsScreen = (props) => {
                   Kindly Confirm or Cancel the Weekly Plan!
                 </Text>
                 <View style={styles.modalbtn}>
-                  <Pressable
+                  <TouchableOpacity
                     style={[styles.button, styles.btnConfirmCancel]}
                     onPress={() => {
                       Alert.alert("Your Weekly Plan has been Cancelled!")
                       setModalVisible(false)
                     }}>
                     <Text style={styles.textStyle}>Cancel</Text>
-                  </Pressable>
-                  <Pressable
+                  </TouchableOpacity>
+                  <TouchableOpacity
                     style={[styles.button, styles.btnConfirmCancel]}
                     onPress={() => {
                       subscribeNewPlan()
@@ -297,7 +297,7 @@ const WeeklyPlanDetailsScreen = (props) => {
                      
                     }}>
                     <Text style={styles.textStyle}>Confirm</Text>
-                  </Pressable>
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>

@@ -75,7 +75,7 @@ const MyPlanScreen = (props) => {
         data={weeklyPlansList}
         renderItem={showItem}
         refreshControl={<RefreshControl refreshing={isLoading} onRefresh={()=>{setLoading(true)}}/>}
-        keyExtractor={(item) => item.plan_id}
+        keyExtractor={(item) => item.subscription_id}
       />
     </View>
   )
